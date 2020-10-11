@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,36 +7,47 @@ namespace breakout
 {
     public class Game1 : Game
     {
+        private MoveFunc move = BallOps.move;
         private Ball ball;
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            // Set up window
+            Window.AllowUserResizing = true;
+            Window.Position = new Point(200, 200);
+            graphics = new GraphicsDeviceManager(this);
+            graphics.IsFullScreen = false;
+            graphics.ApplyChanges();
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
             ball = new Ball(
-                new Vector2 (
-                    _graphics.PreferredBackBufferWidth / 2,
-                    _graphics.PreferredBackBufferHeight / 2
+                new Vector2(
+                    graphics.PreferredBackBufferWidth / 2,
+                    graphics.PreferredBackBufferHeight / 2
                 ),
-                100f,
+                200f,
                 null
             );
 
             base.Initialize();
+
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             ball.texture = Content.Load<Texture2D>("ball");
@@ -48,20 +60,19 @@ namespace breakout
 
             // TODO: Add your update logic here
             var kstate = Keyboard.GetState();
+            var elapsedTime = gameTime.ElapsedGameTime.TotalSeconds;
 
             if (kstate.IsKeyDown(Keys.Up))
-                ball.position.Y -= ball.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                ball = move(ball, Direction.Up, elapsedTime);
 
-            if(kstate.IsKeyDown(Keys.Down))
-                ball.position.Y += ball.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (kstate.IsKeyDown(Keys.Down))
+                ball = move(ball, Direction.Down, elapsedTime);
 
             if (kstate.IsKeyDown(Keys.Left))
-                ball.position.X -= ball.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                ball = move(ball, Direction.Left, elapsedTime);
 
-            if(kstate.IsKeyDown(Keys.Right))
-                ball.position.X += ball.speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            base.Update(gameTime);
+            if (kstate.IsKeyDown(Keys.Right))
+                ball = move(ball, Direction.Right, elapsedTime);
 
             base.Update(gameTime);
         }
@@ -71,9 +82,9 @@ namespace breakout
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(ball.texture, ball.position, Color.White);
-            _spriteBatch.End();
+            spriteBatch.Begin();
+            spriteBatch.Draw(ball.texture, ball.position, Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
