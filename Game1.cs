@@ -8,6 +8,7 @@ namespace breakout
     public class Game1 : Game
     {
         private MoveFunc move = BallOps.move;
+        private ReverseFunc reverse = BallOps.reverse;
         private Ball ball;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -34,7 +35,7 @@ namespace breakout
                     graphics.PreferredBackBufferWidth / 2,
                     graphics.PreferredBackBufferHeight / 2
                 ),
-                200f,
+                new Vector2(200f, 200f),
                 null
             );
 
@@ -62,17 +63,25 @@ namespace breakout
             var kstate = Keyboard.GetState();
             var elapsedTime = gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (kstate.IsKeyDown(Keys.Up))
-                ball = move(ball, Direction.Up, elapsedTime);
+            if (ball.Top <= 0 || ball.Bottom >= Window.ClientBounds.Height)
+                ball = reverse(ball, Heading.Vertical);
 
-            if (kstate.IsKeyDown(Keys.Down))
-                ball = move(ball, Direction.Down, elapsedTime);
+            if (ball.Left <= 0 || ball.Right >= Window.ClientBounds.Width)
+                ball = reverse(ball, Heading.Horizontal);
 
-            if (kstate.IsKeyDown(Keys.Left))
-                ball = move(ball, Direction.Left, elapsedTime);
+            ball = move(ball, elapsedTime);
 
-            if (kstate.IsKeyDown(Keys.Right))
-                ball = move(ball, Direction.Right, elapsedTime);
+            // if (kstate.IsKeyDown(Keys.Up) && ball.Top > 0)
+            //     ball = move(ball, Direction.Up, elapsedTime);
+
+            // if (kstate.IsKeyDown(Keys.Down) && ball.Bottom < Window.ClientBounds.Height)
+            //     ball = move(ball, Direction.Down, elapsedTime);
+
+            // if (kstate.IsKeyDown(Keys.Left) && ball.Left > 0)
+            //     ball = move(ball, Direction.Left, elapsedTime);
+
+            // if (kstate.IsKeyDown(Keys.Right) && ball.Right < Window.ClientBounds.Width)
+            //     ball = move(ball, Direction.Right, elapsedTime);
 
             base.Update(gameTime);
         }
