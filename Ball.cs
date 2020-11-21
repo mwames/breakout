@@ -19,16 +19,18 @@ namespace Breakout
         public Vector2 position;
         public Vector2 speed;
         public Texture2D texture;
+        public int radius;
 
         public float Top => position.Y;
-        public float Bottom => position.Y + texture.Height;
+        public float Bottom => position.Y + radius * 2;
         public float Left => position.X;
-        public float Right => position.X + texture.Width;
+        public float Right => position.X + radius * 2;
 
         public Ball(Vector2 p, Vector2 s, Texture2D t) {
             position = p;
             speed = s;
             texture = t;
+            radius = 10;
         }
     }
 

@@ -7,12 +7,13 @@ namespace Breakout {
         public bool gameOver = false;
         public float totalPoints = 0f;
 
-        public void conUpdate(GameTime gameTime) {
+        public void update() {
             if (inGame) {
                 totalPoints += 0;
             } else {
-                KeyboardState kState = Keyboard.GetState();
-                if (kState.IsKeyDown(Keys.Enter)) {
+                var kState = Keyboard.GetState();
+                var gState = GamePad.GetState(PlayerIndex.One);
+                if (kState.IsKeyDown(Keys.Enter) || gState.IsButtonDown(Buttons.Start)) {
                     inGame = true;
                 }
             }
