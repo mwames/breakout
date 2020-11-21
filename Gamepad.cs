@@ -1,34 +1,23 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Breakout
-{
-    public enum Direction {
-        Up,
-        Down,
-        Left,
-        Right,
-    }
-    public enum Heading {
-        Vertical,
-        Horizontal
-    }
-
-    public struct Ball {
+namespace Breakout {
+    public struct Gamepad {
         public Vector2 position;
         public Vector2 speed;
         public Texture2D texture;
-
+        
         public float Top => position.Y;
         public float Bottom => position.Y + texture.Height;
         public float Left => position.X;
         public float Right => position.X + texture.Width;
 
-        public Ball(Vector2 p, Vector2 s, Texture2D t) {
+        public Gamepad(Vector2 p, Vector2 s, Texture2D t) {
             position = p;
             speed = s;
             texture = t;
+           
         }
     }
 

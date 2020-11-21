@@ -1,15 +1,10 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Audio; // used for soundeffects default .wav
+using Microsoft.Xna.Framework.Audio;
 
-
-
-namespace breakout
-{
-    public class Game1 : Game
-    {
+namespace Breakout {
+    public class Game1 : Game {
         private MoveFunc move = BallOps.move;
         private ReverseFunc reverse = BallOps.reverse;
         private Ball ball;
@@ -17,22 +12,16 @@ namespace breakout
         private SpriteBatch spriteBatch;
         Texture2D titleScreen;
         SpriteFont gameFont;
-        Texture2D paddle;
+        Texture2D paddleTexture;
         Texture2D heart;
-      
-        
-
         Controller gameController =  new Controller();
-        Paddle player = new Paddle();
+        Paddle paddle = new Paddle();
 
-        public static class MySounds
-        {
+        public static class MySounds {
             public static SoundEffect ballSound;
         }
         
-
-        public Game1()
-        {
+        public Game1() {
             // Set up window
             Window.AllowUserResizing = true;
             Window.Position = new Point(200, 200);
@@ -42,11 +31,9 @@ namespace breakout
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
         }
 
-        protected override void Initialize()
-        {
+        protected override void Initialize() {
             // TODO: Add your initialization logic here
             ball = new Ball(
                 new Vector2(
@@ -64,22 +51,19 @@ namespace breakout
             graphics.ApplyChanges();
         }
 
-        protected override void LoadContent()
-        {
-
+        protected override void LoadContent() {
             // TODO: use this.Content to load your game content here
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameFont = Content.Load<SpriteFont>("gameFont");
             titleScreen = Content.Load<Texture2D>("skull");
             ball.texture = Content.Load<Texture2D>("ball");
-            paddle = Content.Load<Texture2D>("paddle");
+            paddleTexture = Content.Load<Texture2D>("paddle");
             heart = Content.Load<Texture2D>("heart");
 
             MySounds.ballSound = Content.Load<SoundEffect>("ballSound");
         }
 
-        protected override void Update(GameTime gameTime)
-        {
+        protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
@@ -88,40 +72,33 @@ namespace breakout
             var elapsedTime = gameTime.ElapsedGameTime.TotalSeconds;
 
             gameController.conUpdate(gameTime);
-            player.paddleUpdate(gameTime, gameController);
+            paddle.update(gameTime, gameController);
 
             if (gameController.inGame)
                 ball = move(ball, elapsedTime);
 
-            if (ball.Top <= 0 && gameController.gameOver == false)
-            {
+            if (ball.Top <= 0 && gameController.gameOver == false) {
                 MySounds.ballSound.Play();
                 ball = reverse(ball, Heading.Vertical);
                // points += 5;
                 
             }
 
-            if ( ball.Bottom >= Window.ClientBounds.Height)
-            {
-
+            if ( ball.Bottom >= Window.ClientBounds.Height) {
                 ball = reverse(ball, Heading.Vertical);
-                
-                player.Health--;
-                if (player.Health <= 0)
+                paddle.health--;
+
+                if (paddle.health <= 0)
                     gameController.gameOver = true;
             }
 
-            if (ball.Left <= 0 && gameController.gameOver == false || ball.Right >= Window.ClientBounds.Width && gameController.gameOver == false)
-            {
+            if (ball.Left <= 0 && gameController.gameOver == false || ball.Right >= Window.ClientBounds.Width && gameController.gameOver == false) {
                 MySounds.ballSound.Play();
                 ball = reverse(ball, Heading.Horizontal);
             }
                 
-
-           
-
-             //if (kstate.IsKeyDown(Keys.Up) && ball.Top > 0)
-                //ball = move(ball, Direction.Up, elapsedTime);
+            //if (kstate.IsKeyDown(Keys.Up) && ball.Top > 0)
+            //ball = move(ball, Direction.Up, elapsedTime);
 
             // if (kstate.IsKeyDown(Keys.Down) && ball.Bottom < Window.ClientBounds.Height)
             //     ball = move(ball, Direction.Down, elapsedTime);
@@ -135,41 +112,31 @@ namespace breakout
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
+        protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            if (gameController.inGame == false) 
-            {
+            if (!gameController.inGame) {
                 spriteBatch.Draw(titleScreen,new Rectangle(0,0,Window.ClientBounds.Width,Window.ClientBounds.Height), Color.White);
                 string menuMessage = "Press enter to begin!";
                 Vector2 sizeOFText = gameFont.MeasureString(menuMessage);
                 spriteBatch.DrawString(gameFont, menuMessage, new Vector2(Window.ClientBounds.Width / 2 - sizeOFText.X / 2 , Window.ClientBounds.Height -50), Color.Black);
-
-            }
-            else
-            {
-                for (int i = 0; i < player.Health; i++)
-                {
+            } else {
+                for (int i = 0; i < paddle.health; i++) {
                     spriteBatch.Draw(heart, new Vector2(i * 63, graphics.PreferredBackBufferHeight -63), Color.White);
                 }
 
-                if (gameController.gameOver == false)
-                {
+                if (gameController.gameOver == false) {
                     spriteBatch.Draw(ball.texture, ball.position, Color.White);
-                    spriteBatch.Draw(paddle, new Vector2(player.position.X - 34, Window.ClientBounds.Height - 35), Color.White);
+                    spriteBatch.Draw(paddleTexture, new Vector2(paddle.position.X - 34, Window.ClientBounds.Height - 35), Color.White);
                 }
                 spriteBatch.DrawString(gameFont, "Points: " + gameController.totalPoints.ToString(), new Vector2(3, 3), Color.Black);
-            
             }
 
 
-            if (gameController.gameOver == true )
-            {
-               
+            if (gameController.gameOver) {
                 string gameOverMessage = "You have died!";
                 GraphicsDevice.Clear(Color.Yellow);
                 spriteBatch.DrawString(gameFont, gameOverMessage, new Vector2(Window.ClientBounds.Width / 3 , Window.ClientBounds.Height /2), Color.Black);
