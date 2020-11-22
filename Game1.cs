@@ -77,11 +77,6 @@ namespace Breakout
             ballSound = Content.Load<SoundEffect>("ballSound");
         }
 
-        public GamePadState GetGamePadState()
-        {
-            return GamePad.GetState(PlayerIndex.One);
-        }
-
         protected override void Update(GameTime gameTime)
         {
             var keyboardState = Keyboard.GetState();
