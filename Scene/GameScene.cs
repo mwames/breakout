@@ -15,16 +15,12 @@ namespace Breakout
         public Ball ball;
         private GameWindow Window;
         private SoundEffect ballSound;
-        private TextureManager textureManager;
-        private SceneManager sceneManager;
         public GameScene(
             Controller gameController,
             Paddle paddle,
             Ball ball,
             GameWindow Window,
-            SoundEffect ballSound,
-            TextureManager textureManager,
-            SceneManager sceneManager
+            SoundEffect ballSound
         )
         {
             this.gameController = gameController;
@@ -32,15 +28,13 @@ namespace Breakout
             this.ball = ball;
             this.Window = Window;
             this.ballSound = ballSound;
-            this.textureManager = textureManager;
-            this.sceneManager = sceneManager;
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
             for (int i = 0; i < paddle.health; i++)
             {
-                spriteBatch.Draw(textureManager.Get(TextureName.Heart), new Vector2(i * 63, Breakout.Window.HEIGHT - 63), Color.White);
+                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, Breakout.Window.HEIGHT - 63), Color.White);
             }
 
             spriteBatch.Draw(
@@ -84,7 +78,7 @@ namespace Breakout
                 paddle.health--;
 
                 if (paddle.health <= 0)
-                    sceneManager.currentScene = sceneManager.Get(SceneName.GameOver);
+                    Store.scenes.currentScene = Store.scenes.Get(SceneName.GameOver);
             }
 
             if (ball.Left <= 0 && gameController.gameOver == false || ball.Right >= Window.ClientBounds.Width && gameController.gameOver == false)

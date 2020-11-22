@@ -20,20 +20,18 @@ namespace Breakout
     {
         public Vector2 position;
         public Vector2 speed;
-        public TextureManager textureManager;
-        public Texture2D texture => textureManager.Get(TextureName.Ball);
         public int radius;
 
+        public Texture2D texture => Store.textures.Get(TextureName.Ball);
         public float Top => position.Y;
         public float Bottom => position.Y + radius * 2;
         public float Left => position.X;
         public float Right => position.X + radius * 2;
 
-        public Ball(Vector2 p, Vector2 s, TextureManager tm)
+        public Ball(Vector2 p, Vector2 s)
         {
             position = p;
             speed = s;
-            textureManager = tm;
             radius = 10;
         }
     }
@@ -51,16 +49,15 @@ namespace Breakout
                     ball.position.X + ball.speed.X * (float)gameTime,
                     ball.position.Y + ball.speed.Y * (float)gameTime
                 ),
-                ball.speed,
-                ball.textureManager
+                ball.speed
             );
         }
 
         public static Ball reverse(Ball ball, Heading heading)
         {
             return heading == Heading.Vertical
-                ? new Ball(ball.position, new Vector2(ball.speed.X, ball.speed.Y * -1), ball.textureManager)
-                : new Ball(ball.position, new Vector2(ball.speed.X * -1, ball.speed.Y), ball.textureManager);
+                ? new Ball(ball.position, new Vector2(ball.speed.X, ball.speed.Y * -1))
+                : new Ball(ball.position, new Vector2(ball.speed.X * -1, ball.speed.Y));
         }
     }
 }

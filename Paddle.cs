@@ -9,14 +9,12 @@ namespace Breakout
         public int speed;
         public Vector2 position;
         public int health;
-        public TextureManager textureManager;
-        public Texture2D texture => textureManager.Get(TextureName.Paddle);
+        public Texture2D texture => Store.textures.Get(TextureName.Paddle);
 
-        public Paddle(Vector2 position, int speed, TextureManager textureManager)
+        public Paddle(Vector2 position, int speed)
         {
             this.position = position;
             this.speed = speed;
-            this.textureManager = textureManager;
             this.health = 3;
         }
 

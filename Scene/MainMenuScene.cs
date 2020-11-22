@@ -8,21 +8,17 @@ namespace Breakout
     {
         readonly int OFFSET = 50;
         readonly string MESSAGE = "Press enter to begin!";
-        TextureManager textureManager;
         GameWindow Window;
-        SceneManager sceneManager;
 
-        public MainMenuScene(TextureManager textureManager, GameWindow Window, SceneManager sceneManager)
+        public MainMenuScene(GameWindow Window)
         {
-            this.textureManager = textureManager;
             this.Window = Window;
-            this.sceneManager = sceneManager;
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
             spriteBatch.Draw(
-                textureManager.Get(TextureName.TitleScreen),
+                Store.textures.Get(TextureName.TitleScreen),
                 new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height),
                 Color.White
             );
@@ -43,7 +39,7 @@ namespace Breakout
 
             if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.IsButtonDown(Buttons.Start))
             {
-                sceneManager.currentScene = sceneManager.Get(SceneName.Game);
+                Store.scenes.currentScene = Store.scenes.Get(SceneName.Game);
             }
         }
     }

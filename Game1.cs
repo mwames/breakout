@@ -14,13 +14,10 @@ namespace Breakout
         private Player player = new Player(PlayerIndex.One);
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private SceneManager sceneManager;
-        private TextureManager textureManager;
         private SpriteFont gameFont;
         private Controller gameController = new Controller();
         private Paddle paddle;
         private SoundEffect ballSound;
-        private MainMenuScene mainMenuScene;
 
         public Game1()
         {
@@ -41,15 +38,14 @@ namespace Breakout
             graphics.PreferredBackBufferWidth = Breakout.Window.WIDTH;
             graphics.PreferredBackBufferHeight = Breakout.Window.HEIGHT;
             graphics.ApplyChanges();
-            textureManager = new TextureManager();
+            Store.textures = new TextureManager();
 
             ball = new Ball(
                 new Vector2(
                     graphics.PreferredBackBufferWidth / 2,
                     graphics.PreferredBackBufferHeight / 2
                 ),
-                new Vector2(200f, 200f),
-                textureManager
+                new Vector2(200f, 200f)
             );
 
             paddle = new Paddle(
@@ -57,26 +53,25 @@ namespace Breakout
                     graphics.PreferredBackBufferWidth / 2 - 64,
                     graphics.PreferredBackBufferHeight - 92
                 ),
-                460,
-                textureManager
+                460
             );
 
             // Set up Scenes
-            sceneManager = new SceneManager();
-            sceneManager.Add(SceneName.Menu, new MainMenuScene(textureManager, Window, sceneManager));
-            sceneManager.Add(SceneName.Game, new GameScene(gameController, paddle, ball, Window, ballSound, textureManager, sceneManager));
-            sceneManager.Add(SceneName.GameOver, new GameOverScene(Window));
-            sceneManager.currentScene = sceneManager.Get(SceneName.Menu);
+            Store.scenes = new SceneManager();
+            Store.scenes.Add(SceneName.Menu, new MainMenuScene(Window));
+            Store.scenes.Add(SceneName.Game, new GameScene(gameController, paddle, ball, Window, ballSound));
+            Store.scenes.Add(SceneName.GameOver, new GameOverScene(Window));
+            Store.scenes.currentScene = Store.scenes.Get(SceneName.Menu);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            textureManager.Add(TextureName.Ball, Content.Load<Texture2D>("ball"));
-            textureManager.Add(TextureName.Paddle, Content.Load<Texture2D>("paddle"));
-            textureManager.Add(TextureName.TitleScreen, Content.Load<Texture2D>("skull"));
-            textureManager.Add(TextureName.Heart, Content.Load<Texture2D>("heart"));
+            Store.textures.Add(TextureName.Ball, Content.Load<Texture2D>("ball"));
+            Store.textures.Add(TextureName.Paddle, Content.Load<Texture2D>("paddle"));
+            Store.textures.Add(TextureName.TitleScreen, Content.Load<Texture2D>("skull"));
+            Store.textures.Add(TextureName.Heart, Content.Load<Texture2D>("heart"));
 
             gameFont = Content.Load<SpriteFont>("gameFont");
             ballSound = Content.Load<SoundEffect>("ballSound");
@@ -94,7 +89,7 @@ namespace Breakout
             if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            sceneManager.currentScene.Update(gamePadState, keyboardState, gameTime);
+            Store.scenes.currentScene.Update(gamePadState, keyboardState, gameTime);
 
             base.Update(gameTime);
         }
@@ -104,7 +99,7 @@ namespace Breakout
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            sceneManager.currentScene.Draw(spriteBatch, gameFont, GraphicsDevice);
+            Store.scenes.currentScene.Draw(spriteBatch, gameFont, GraphicsDevice);
             spriteBatch.End();
 
             base.Draw(gameTime);
