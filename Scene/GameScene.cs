@@ -8,8 +8,6 @@ namespace Breakout
 {
     public class GameScene : IScene
     {
-        private readonly MoveFunc move = BallOps.move;
-        private readonly ReverseFunc reverse = BallOps.reverse;
         private Controller gameController;
         private Paddle paddle;
         public Ball ball;
@@ -30,23 +28,6 @@ namespace Breakout
             this.ballSound = ballSound;
         }
 
-        public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
-        {
-            for (int i = 0; i < paddle.health; i++)
-            {
-                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, Breakout.Window.HEIGHT - 63), Color.White);
-            }
-
-            spriteBatch.Draw(
-                ball.texture,
-                new Rectangle((int)ball.position.X, (int)ball.position.Y, ball.radius * 2, ball.radius * 2),
-                new Rectangle(0, 0, ball.texture.Width, ball.texture.Height),
-                Color.White
-            );
-            spriteBatch.Draw(paddle.texture, new Vector2(paddle.position.X, paddle.position.Y), Color.White);
-            spriteBatch.DrawString(spriteFont, "Points: " + gameController.totalPoints.ToString(), new Vector2(3, 3), Color.Black);
-        }
-
         public void Update(GamePadState gamePadState, KeyboardState keyboardState, GameTime gameTime)
         {
             var elapsedTime = gameTime.ElapsedGameTime.TotalSeconds;
@@ -58,34 +39,71 @@ namespace Breakout
             else
                 paddle.update(gameTime, gameController, keyboardState);
 
-            ball = move(ball, elapsedTime);
+            ball.move(elapsedTime);
 
+            if (Collision.DidCollide(ball, paddle)) {
+                // Top was hit
+                if (ball.Bottom >= paddle.Top && ball.Top < paddle.Top)
+                {
+                    ball.reverse(Heading.Vertical);
+                    ball.position.Y = paddle.Top - ball.radius * 2;
+                }
 
-            if (ball.Top <= 0 && gameController.gameOver == false)
-            {
-                // ballSound.Play();
-                ball = reverse(ball, Heading.Vertical);
+                // Left was hit
+                if (ball.Right >= paddle.Left && ball.Left < paddle.Left) {
+                    ball.reverse(Heading.Horizontal);
+                    ball.position.X = paddle.Left - ball.radius * 2;
+                }
+
+                // Right was hit
+                if (ball.Left <= paddle.Right && ball.Right > paddle.Right) {
+                    ball.reverse(Heading.Horizontal);
+                    ball.position.X = paddle.Right;
+                }
             }
 
-            if (ball.Bottom >= paddle.position.Y && ball.Left >= paddle.position.X && ball.Right <= paddle.position.X + paddle.texture.Width)
+
+            if (ball.Top <= 0)
             {
-                ball = reverse(ball, Heading.Vertical);
+                ball.reverse(Heading.Vertical);
+                ball.position.Y = 0;
+                // ballSound.Play();
+            }
+
+            if (ball.Left <= 0) {
+                ball.reverse(Heading.Horizontal);
+                ball.position.X = 0;
+                // ballSound.Play();
+            }
+
+            if (ball.Right >= Window.ClientBounds.Width)
+            {
+                ball.reverse(Heading.Horizontal);
+                ball.position.X = Window.ClientBounds.Width - ball.radius * 2;
+                // ballSound.Play();
             }
 
             if (ball.Bottom >= Window.ClientBounds.Height)
             {
-                ball = reverse(ball, Heading.Vertical);
-                paddle.health--;
+                ball.reverse(Heading.Vertical);
+                ball.position.Y = Window.ClientBounds.Height - ball.radius * 2;
+               // paddle.health--;
 
                 if (paddle.health <= 0)
                     Store.scenes.currentScene = Store.scenes.Get(SceneName.GameOver);
             }
+        }
 
-            if (ball.Left <= 0 && gameController.gameOver == false || ball.Right >= Window.ClientBounds.Width && gameController.gameOver == false)
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
+        {
+            for (int i = 0; i < paddle.health; i++)
             {
-                // ballSound.Play();
-                ball = reverse(ball, Heading.Horizontal);
+                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, Breakout.Window.HEIGHT - 63), Color.White);
             }
+
+            ball.Draw(spriteBatch);
+            paddle.Draw(spriteBatch);
+            spriteBatch.DrawString(spriteFont, "Points: " + gameController.totalPoints.ToString(), new Vector2(3, 3), Color.Black);
         }
 
         public override string ToString() {

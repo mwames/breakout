@@ -9,7 +9,6 @@ namespace Breakout
         private Dictionary<SceneName, IScene> scenes = new Dictionary<SceneName, IScene>();
 
         public void Add(SceneName name, IScene scene) {
-            Console.WriteLine(name.ToString(), (scene == null).ToString());
             scenes.Add(name, scene);
         }
 

@@ -16,7 +16,7 @@ namespace Breakout
         Horizontal
     }
 
-    public struct Ball
+    public class Ball
     {
         public Vector2 position;
         public Vector2 speed;
@@ -27,6 +27,7 @@ namespace Breakout
         public float Bottom => position.Y + radius * 2;
         public float Left => position.X;
         public float Right => position.X + radius * 2;
+        public Vector2 Center => new Vector2(position.X + radius, position.Y + radius);
 
         public Ball(Vector2 p, Vector2 s)
         {
@@ -34,30 +35,51 @@ namespace Breakout
             speed = s;
             radius = 10;
         }
-    }
 
-    // Delegate declarations.
-    public delegate Ball MoveFunc(Ball ball, double gameTime);
-    public delegate Ball ReverseFunc(Ball ball, Heading heading);
-
-    public static class BallOps
-    {
-        public static Ball move(Ball ball, double gameTime)
+        public void move(double gameTime)
         {
-            return new Ball(
-                new Vector2(
-                    ball.position.X + ball.speed.X * (float)gameTime,
-                    ball.position.Y + ball.speed.Y * (float)gameTime
-                ),
-                ball.speed
-            );
+            position.X += speed.X * (float)gameTime;
+            position.Y += speed.Y * (float)gameTime;
         }
 
-        public static Ball reverse(Ball ball, Heading heading)
+        public void reverse(Heading heading)
         {
-            return heading == Heading.Vertical
-                ? new Ball(ball.position, new Vector2(ball.speed.X, ball.speed.Y * -1))
-                : new Ball(ball.position, new Vector2(ball.speed.X * -1, ball.speed.Y));
+            if (heading == Heading.Vertical)
+                speed.Y *= -1;
+            else 
+                speed.X *= -1;
+        }
+
+        public void Draw(SpriteBatch spriteBatch) {
+            // Draws the ball
+            spriteBatch.Draw(
+                texture,
+                new Rectangle((int)position.X, (int)position.Y, radius * 2, radius * 2),
+                new Rectangle(0, 0, texture.Width, texture.Height),
+                Color.White
+            );
+
+            if (ModeManager.currentMode == Mode.Debug) {
+                // Center locater dot
+                var center = new Vector2((int)Center.X, (int)Center.Y);
+                Dot.Draw(spriteBatch, center, texture);
+
+                // Left locator dot
+                var left = new Vector2((int)Left, (int)Center.Y);
+                Dot.Draw(spriteBatch, left, texture);
+
+                // Right locator dot
+                var right = new Vector2((int)Right, (int)Center.Y);
+                Dot.Draw(spriteBatch, right, texture);
+
+                // Top locator dot
+                var top = new Vector2((int)Center.X, (int)Top);
+                Dot.Draw(spriteBatch, top, texture);
+
+                // Right locator dot
+                var bottom = new Vector2((int)Center.X, (int)Bottom);
+                Dot.Draw(spriteBatch, bottom, texture);
+            }
         }
     }
 }

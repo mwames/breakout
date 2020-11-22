@@ -7,8 +7,6 @@ namespace Breakout
 {
     public class Game1 : Game
     {
-        private MoveFunc move = BallOps.move;
-        private ReverseFunc reverse = BallOps.reverse;
         private GetInputFunc getInput = PlayerOps.getInput;
         private Ball ball;
         private Player player = new Player(PlayerIndex.One);
@@ -18,6 +16,8 @@ namespace Breakout
         private Controller gameController = new Controller();
         private Paddle paddle;
         private SoundEffect ballSound;
+        private KeyboardState previousKeyboardState;
+        private KeyboardState keyboardState;
 
         public Game1()
         {
@@ -72,17 +72,21 @@ namespace Breakout
             Store.textures.Add(TextureName.Paddle, Content.Load<Texture2D>("paddle"));
             Store.textures.Add(TextureName.TitleScreen, Content.Load<Texture2D>("skull"));
             Store.textures.Add(TextureName.Heart, Content.Load<Texture2D>("heart"));
-
             gameFont = Content.Load<SpriteFont>("gameFont");
             ballSound = Content.Load<SoundEffect>("ballSound");
         }
 
         protected override void Update(GameTime gameTime)
         {
-            var keyboardState = Keyboard.GetState();
+            previousKeyboardState = keyboardState;
+            keyboardState = Keyboard.GetState();
             var gamePadState = getInput(player);
+
             if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
+            if(keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
+                ModeManager.Toggle(Mode.Debug);
 
             Store.scenes.currentScene.Update(gamePadState, keyboardState, gameTime);
 
@@ -92,7 +96,6 @@ namespace Breakout
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin();
             Store.scenes.currentScene.Draw(spriteBatch, gameFont, GraphicsDevice);
             spriteBatch.End();
