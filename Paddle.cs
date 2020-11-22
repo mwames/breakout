@@ -9,20 +9,24 @@ namespace Breakout
         public int speed;
         public Vector2 position;
         public int health;
-        public Texture2D texture;
+        public TextureManager textureManager;
+        public Texture2D texture => textureManager.Get(TextureName.Paddle);
 
-        public Paddle(Vector2 position, int speed, Texture2D texture) {
+        public Paddle(Vector2 position, int speed, TextureManager textureManager)
+        {
             this.position = position;
             this.speed = speed;
-            this.texture = texture;
+            this.textureManager = textureManager;
             this.health = 3;
         }
 
-        private bool isInBoundLeft() {
+        private bool isInBoundLeft()
+        {
             return position.X > 0;
         }
 
-        private bool isInBoundRight() {
+        private bool isInBoundRight()
+        {
             return position.X + texture.Width < Breakout.Window.WIDTH;
         }
 
@@ -65,7 +69,6 @@ namespace Breakout
                 {
                     position.X += speed * dt;
                 }
-
             }
         }
     }
