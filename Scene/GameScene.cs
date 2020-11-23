@@ -87,7 +87,7 @@ namespace Breakout
             {
                 ball.reverse(Heading.Vertical);
                 ball.position.Y = Window.ClientBounds.Height - ball.radius * 2;
-               // paddle.health--;
+                paddle.health--;
 
                 if (paddle.health <= 0)
                     Store.scenes.currentScene = Store.scenes.Get(SceneName.GameOver);
