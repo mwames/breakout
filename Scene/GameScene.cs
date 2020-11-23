@@ -101,7 +101,7 @@ namespace Breakout
                 spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, Breakout.Window.HEIGHT - 63), Color.White);
             }
 
-            ball.Draw(spriteBatch);
+            ball.Draw(spriteBatch, spriteFont);
             paddle.Draw(spriteBatch);
             spriteBatch.DrawString(spriteFont, "Points: " + gameController.totalPoints.ToString(), new Vector2(3, 3), Color.Black);
         }

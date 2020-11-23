@@ -84,7 +84,7 @@ namespace Breakout
             if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            if(keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
+            if (keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
                 ModeManager.Toggle(Mode.Debug);
 
             Store.scenes.currentScene.Update(gamePadState, keyboardState, gameTime);

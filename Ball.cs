@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Breakout
@@ -21,7 +22,8 @@ namespace Breakout
         public Vector2 position;
         public Vector2 speed;
         public int radius;
-
+        public int velocity = 200;
+        public int heading = 315;
         public Texture2D texture => Store.textures.Get(TextureName.Ball);
         public float Top => position.Y;
         public float Bottom => position.Y + radius * 2;
@@ -38,20 +40,43 @@ namespace Breakout
 
         public void move(double gameTime)
         {
+            speed.X = CalcX(heading);
+            speed.Y = CalcY(heading);
             position.X += speed.X * (float)gameTime;
             position.Y += speed.Y * (float)gameTime;
         }
 
-        public void reverse(Heading heading)
-        {
-            if (heading == Heading.Vertical)
-                speed.Y *= -1;
-            else 
-                speed.X *= -1;
+        public int FlipY(int theta) {
+            return (180 - theta) % 360;
         }
 
-        public void Draw(SpriteBatch spriteBatch) {
-            // Draws the ball
+        public int FlipX(int theta) {
+            return (-1 * theta) % 360;
+        }
+
+        public float CalcX(int theta) {
+            return (float)(velocity * Math.Cos((Math.PI * theta) / 180));
+        }
+
+        public float CalcY(int theta) {
+            return (float)(velocity * Math.Sin((Math.PI * theta) / 180));
+        }
+
+        public void reverse(Heading heading)
+        {
+            Random random = new Random();
+            var variance = random.Next(-9, 10);
+            velocity += 10;
+            if (heading == Heading.Vertical)
+                this.heading = FlipX(this.heading + variance);
+            else 
+                this.heading = FlipY(this.heading + variance);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont) {
+            spriteBatch.DrawString(spriteFont, $"X Speed: {speed.X}", new Vector2(3, 30), Color.Black);
+            spriteBatch.DrawString(spriteFont, $"Y Speed: {speed.Y}", new Vector2(3, 60), Color.Black);
+
             spriteBatch.Draw(
                 texture,
                 new Rectangle((int)position.X, (int)position.Y, radius * 2, radius * 2),

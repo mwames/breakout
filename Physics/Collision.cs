@@ -1,5 +1,3 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Breakout
@@ -14,7 +12,7 @@ namespace Breakout
             var rr = paddle.Right;
             var rt = paddle.Top;
             var rb = paddle.Bottom;
-            
+
             // temporary variables to set edges for testing
             float testX = cx;
             float testY = cy;
