@@ -15,6 +15,15 @@ namespace Breakout
             this.Window = Window;
         }
 
+        public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        {
+
+            if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.IsButtonDown(Buttons.Start))
+            {
+                Store.scenes.currentScene = Store.scenes.Get(SceneName.Game);
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
             spriteBatch.Draw(
@@ -32,15 +41,6 @@ namespace Breakout
                 ),
                 Color.Black
                 );
-        }
-
-        public void Update(GamePadState gamePadState, KeyboardState keyboardState, GameTime gameTime)
-        {
-
-            if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.IsButtonDown(Buttons.Start))
-            {
-                Store.scenes.currentScene = Store.scenes.Get(SceneName.Game);
-            }
         }
     }
 }

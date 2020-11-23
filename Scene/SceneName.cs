@@ -4,6 +4,7 @@ namespace Breakout
     {
         Menu,
         Game,
-        GameOver
+        GameOver,
+        Pause,
     }
 }

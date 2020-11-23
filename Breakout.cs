@@ -5,20 +5,21 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Breakout
 {
-    public class Game1 : Game
+    public class Breakout : Game
     {
         private Ball ball;
         private Player player = new Player(PlayerIndex.One);
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont gameFont;
-        private Controller gameController = new Controller();
         private Paddle paddle;
         private SoundEffect ballSound;
         private KeyboardState previousKeyboardState;
         private KeyboardState keyboardState;
+        private GamePadState gamePadState;
+        private GamePadState previousGamePadState;
 
-        public Game1()
+        public Breakout()
         {
             // Set up window
             Window.AllowUserResizing = true;
@@ -34,8 +35,8 @@ namespace Breakout
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphics.PreferredBackBufferWidth = Breakout.Window.WIDTH;
-            graphics.PreferredBackBufferHeight = Breakout.Window.HEIGHT;
+            graphics.PreferredBackBufferWidth = global::Breakout.Window.WIDTH;
+            graphics.PreferredBackBufferHeight = global::Breakout.Window.HEIGHT;
             graphics.ApplyChanges();
             Store.textures = new TextureManager();
 
@@ -58,8 +59,9 @@ namespace Breakout
             // Set up Scenes
             Store.scenes = new SceneManager();
             Store.scenes.Add(SceneName.Menu, new MainMenuScene(Window));
-            Store.scenes.Add(SceneName.Game, new GameScene(gameController, paddle, ball, Window, ballSound));
+            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball, Window, ballSound));
             Store.scenes.Add(SceneName.GameOver, new GameOverScene(Window));
+            Store.scenes.Add(SceneName.Pause, new PauseScene(Window));
             Store.scenes.currentScene = Store.scenes.Get(SceneName.Menu);
 
             base.Initialize();
@@ -79,7 +81,9 @@ namespace Breakout
         {
             previousKeyboardState = keyboardState;
             keyboardState = Keyboard.GetState();
-            var gamePadState = player.getInput();
+
+            previousGamePadState = gamePadState;
+            gamePadState = player.getInput();
 
             if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -87,7 +91,13 @@ namespace Breakout
             if (keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
                 ModeManager.Toggle(Mode.Debug);
 
-            Store.scenes.currentScene.Update(gamePadState, keyboardState, gameTime);
+            Store.scenes.currentScene.Update(
+                gamePadState,
+                previousGamePadState,
+                keyboardState,
+                previousKeyboardState,
+                gameTime
+                );
 
             base.Update(gameTime);
         }

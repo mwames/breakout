@@ -6,7 +6,7 @@ namespace Breakout
 {
     public interface IScene
     {
-        void Update(GamePadState gamePadState, KeyboardState keyboardState, GameTime gameTime);
+        void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime);
         void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice);
     }
 }
