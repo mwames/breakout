@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
-    public struct Player
+    public class Player
     {
         public PlayerIndex Index { get; set; }
 
@@ -11,14 +11,10 @@ namespace Breakout
         {
             Index = index;
         }
-    }
 
-    public delegate GamePadState GetInputFunc(Player player);
-    public static class PlayerOps
-    {
-        public static GamePadState getInput(Player player)
+        public GamePadState getInput()
         {
-            return GamePad.GetState(player.Index);
+            return GamePad.GetState(Index);
         }
     }
 }

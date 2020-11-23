@@ -7,7 +7,6 @@ namespace Breakout
 {
     public class Game1 : Game
     {
-        private GetInputFunc getInput = PlayerOps.getInput;
         private Ball ball;
         private Player player = new Player(PlayerIndex.One);
         private GraphicsDeviceManager graphics;
@@ -80,7 +79,7 @@ namespace Breakout
         {
             previousKeyboardState = keyboardState;
             keyboardState = Keyboard.GetState();
-            var gamePadState = getInput(player);
+            var gamePadState = player.getInput();
 
             if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
