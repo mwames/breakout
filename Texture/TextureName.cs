@@ -8,5 +8,8 @@ namespace Breakout
         TitleScreen,
         Heart,
         RedBlock,
+        GoldBlock,
+        BlueBlock,
+        GreenBlock,
     }
 }
