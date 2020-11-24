@@ -13,7 +13,7 @@ namespace Breakout
         private SpriteBatch spriteBatch;
         private SpriteFont gameFont;
         private Paddle paddle;
-        private Block red;
+        
         private SoundEffect ballSound;
         private KeyboardState previousKeyboardState;
         private KeyboardState keyboardState;
