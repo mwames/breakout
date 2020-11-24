@@ -62,6 +62,18 @@
 /processorParam:TextureFormat=Color
 /build:paddle.png
 
+#begin RedBlock.bmp
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:RedBlock.bmp
+
 #begin skull.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

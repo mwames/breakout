@@ -7,5 +7,6 @@ namespace Breakout
         GameFont,
         TitleScreen,
         Heart,
+        RedBlock,
     }
 }

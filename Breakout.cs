@@ -13,6 +13,7 @@ namespace Breakout
         private SpriteBatch spriteBatch;
         private SpriteFont gameFont;
         private Paddle paddle;
+        private Block red;
         private SoundEffect ballSound;
         private KeyboardState previousKeyboardState;
         private KeyboardState keyboardState;
@@ -55,7 +56,7 @@ namespace Breakout
                 ),
                 460
             );
-
+           
             // Set up Scenes
             Store.scenes = new SceneManager();
             Store.scenes.Add(SceneName.Menu, new MainMenuScene(Window));
@@ -73,8 +74,10 @@ namespace Breakout
             Store.textures.Add(TextureName.Paddle, Content.Load<Texture2D>("paddle"));
             Store.textures.Add(TextureName.TitleScreen, Content.Load<Texture2D>("skull"));
             Store.textures.Add(TextureName.Heart, Content.Load<Texture2D>("heart"));
+            Store.textures.Add(TextureName.RedBlock, Content.Load<Texture2D>("RedBlock"));
             gameFont = Content.Load<SpriteFont>("gameFont");
             ballSound = Content.Load<SoundEffect>("ballSound");
+            
         }
 
         protected override void Update(GameTime gameTime)
