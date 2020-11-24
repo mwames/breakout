@@ -12,7 +12,11 @@ namespace Breakout
         public Ball ball;
         private GameWindow Window;
         private SoundEffect ballSound;
-        private Block red;
+        private RedBlock red;
+        private GoldBlock gold;
+        private BlueBlock blue;
+        private GreenBlock green;
+        
         public GameScene(
             Paddle paddle,
             Ball ball,
@@ -25,7 +29,10 @@ namespace Breakout
             this.ball = ball;
             this.Window = Window;
             this.ballSound = ballSound;
-            this.red = new Block();
+            this.red = new RedBlock();
+            this.gold = new GoldBlock();
+            this.green = new GreenBlock();
+            this.blue = new BlueBlock();
         }
 
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
@@ -109,6 +116,9 @@ namespace Breakout
             paddle.Draw(spriteBatch);
             spriteBatch.DrawString(spriteFont, "Points: ", new Vector2(3, 3), Color.Black);
             red.Draw(spriteBatch);
+            blue.Draw(spriteBatch);
+            gold.Draw(spriteBatch);
+            green.Draw(spriteBatch);
         }
 
         public override string ToString()
