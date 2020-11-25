@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
@@ -17,7 +18,7 @@ namespace Breakout
         Horizontal
     }
 
-    public class Ball
+    public class Ball : IGameObject
     {
         public Vector2 position;
         public Vector2 speed;
@@ -38,12 +39,12 @@ namespace Breakout
             radius = 10;
         }
 
-        public void move(double gameTime)
+        public void Update(GameTime gameTime, GamePadState gState)
         {
             speed.X = CalcX(heading);
             speed.Y = CalcY(heading);
-            position.X += speed.X * (float)gameTime;
-            position.Y += speed.Y * (float)gameTime;
+            position.X += speed.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.Y += speed.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public int FlipY(int theta) {
@@ -62,21 +63,7 @@ namespace Breakout
             return (float)(velocity * Math.Sin((Math.PI * theta) / 180));
         }
 
-        public void reverse(Heading heading)
-        {
-            Random random = new Random();
-            var variance = random.Next(-9, 10);
-            velocity += 10;
-            if (heading == Heading.Vertical)
-                this.heading = FlipX(this.heading + variance);
-            else 
-                this.heading = FlipY(this.heading + variance);
-        }
-
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont) {
-            spriteBatch.DrawString(spriteFont, $"X Speed: {speed.X}", new Vector2(3, 30), Color.Black);
-            spriteBatch.DrawString(spriteFont, $"Y Speed: {speed.Y}", new Vector2(3, 60), Color.Black);
-
             spriteBatch.Draw(
                 texture,
                 new Rectangle((int)position.X, (int)position.Y, radius * 2, radius * 2),
@@ -105,6 +92,16 @@ namespace Breakout
                 var bottom = new Vector2((int)Center.X, (int)Bottom);
                 Dot.Draw(spriteBatch, bottom, texture);
             }
+        }
+
+        public void OnCollide(Side sideOfImpact) {
+            Random random = new Random();
+            var variance = random.Next(-9, 10);
+            velocity += 10;
+            if (sideOfImpact == Side.Bottom || sideOfImpact == Side.Top)
+                this.heading = FlipX(this.heading + variance);
+            else if (sideOfImpact == Side.Left || sideOfImpact == Side.Right)
+                this.heading = FlipY(this.heading + variance);
         }
     }
 }

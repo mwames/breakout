@@ -8,15 +8,17 @@ namespace Breakout
         private static readonly int BLOCK_HEIGHT = 28;
         private static readonly int BLOCK_WIDTH = 96;
         private static readonly int LEFT_OFFSET = 64;
-        private int offset;
         private TextureName textureName;
         private Texture2D Texture => Store.textures.Get(textureName);
-        private int VerticalPosition => (global::Breakout.Window.HEIGHT / 2) - (offset * BLOCK_HEIGHT);
+        private bool delete = false;
+        private int row;
+        private int col;
         
-        public Block(TextureName textureName, int offset)
+        public Block(int col, int row, TextureName textureName)
         {
             this.textureName = textureName;
-            this.offset = offset;
+            this.row = row;
+            this.col = col;
         }
 
         private int HorizontalPosition(int i) {
@@ -25,10 +27,13 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < 7; i++)
-            {
-                spriteBatch.Draw(Texture, new Vector2(HorizontalPosition(i), VerticalPosition), Color.White);
-            }
+            var x = col * BLOCK_WIDTH;
+            var y = row * BLOCK_HEIGHT;
+            spriteBatch.Draw(Texture, new Vector2(x, y), Color.White);
+        }
+
+        public void onCollide() {
+            delete = true;
         }
     }
 }

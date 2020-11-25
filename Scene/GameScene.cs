@@ -10,12 +10,13 @@ namespace Breakout
     {
         private Paddle paddle;
         public Ball ball;
-        private GameWindow Window;
-        private SoundEffect ballSound;
         private Block red;
         private Block gold;
         private Block blue;
         private Block green;
+
+        private GameWindow Window;
+        private SoundEffect ballSound;
         
         public GameScene(
             Paddle paddle,
@@ -29,10 +30,10 @@ namespace Breakout
             this.ball = ball;
             this.Window = Window;
             this.ballSound = ballSound;
-            this.red = new Block(TextureName.RedBlock, 1);
-            this.gold = new Block(TextureName.GoldBlock, 2);
-            this.green = new Block(TextureName.GreenBlock, 3);
-            this.blue = new Block(TextureName.BlueBlock, 4);
+            this.red = new Block(1, 1, TextureName.RedBlock);
+            this.gold = new Block(1, 2, TextureName.GoldBlock);
+            this.green = new Block(2, 1, TextureName.GreenBlock);
+            this.blue = new Block(2, 2, TextureName.BlueBlock);
         }
 
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
@@ -46,28 +47,28 @@ namespace Breakout
             else
                 paddle.update(gameTime, keyboardState);
 
-            ball.move(gameTime.ElapsedGameTime.TotalSeconds);
+            ball.Update(gameTime, gamePadState);
 
             if (Collision.DidCollide(ball, paddle))
             {
-                // Top was hit
+                // Bottom was hit
                 if (ball.Bottom >= paddle.Top && ball.Top < paddle.Top)
                 {
-                    ball.reverse(Heading.Vertical);
+                    ball.OnCollide(Side.Bottom);
                     ball.position.Y = paddle.Top - ball.radius * 2;
                 }
 
                 // Left was hit
                 if (ball.Right >= paddle.Left && ball.Left < paddle.Left)
                 {
-                    ball.reverse(Heading.Horizontal);
+                    ball.OnCollide(Side.Left);
                     ball.position.X = paddle.Left - ball.radius * 2;
                 }
 
                 // Right was hit
                 if (ball.Left <= paddle.Right && ball.Right > paddle.Right)
                 {
-                    ball.reverse(Heading.Horizontal);
+                    ball.OnCollide(Side.Right);
                     ball.position.X = paddle.Right;
                 }
             }
@@ -75,28 +76,28 @@ namespace Breakout
 
             if (ball.Top <= 0)
             {
-                ball.reverse(Heading.Vertical);
+                ball.OnCollide(Side.Top);
                 ball.position.Y = 0;
                 // ballSound.Play();
             }
 
             if (ball.Left <= 0)
             {
-                ball.reverse(Heading.Horizontal);
+                ball.OnCollide(Side.Left);
                 ball.position.X = 0;
                 // ballSound.Play();
             }
 
             if (ball.Right >= Window.ClientBounds.Width)
             {
-                ball.reverse(Heading.Horizontal);
+                ball.OnCollide(Side.Right);
                 ball.position.X = Window.ClientBounds.Width - ball.radius * 2;
                 // ballSound.Play();
             }
 
             if (ball.Bottom >= Window.ClientBounds.Height)
             {
-                ball.reverse(Heading.Vertical);
+                ball.OnCollide(Side.Bottom);
                 ball.position.Y = Window.ClientBounds.Height - ball.radius * 2;
                 paddle.health--;
 
