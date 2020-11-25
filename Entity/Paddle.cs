@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
-    public class Paddle : IGameObject
+    public class Paddle : IGameObject, IRectangle
     {
         public int speed;
         public Vector2 position;

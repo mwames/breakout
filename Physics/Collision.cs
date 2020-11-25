@@ -4,7 +4,7 @@ namespace Breakout
 {
     public static class Collision
     {
-        public static bool DidCollide(Ball ball, Paddle paddle)
+        public static bool DidCollide(Ball ball, IRectangle paddle)
         {
             var cx = ball.Center.X;
             var cy = ball.Center.Y;

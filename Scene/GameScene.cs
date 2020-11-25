@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +16,7 @@ namespace Breakout
 
         private GameWindow Window;
         private SoundEffect ballSound;
-        private string[] lines = System.IO.File.ReadAllLines(@"./Levels/level1.txt");
+        private string[] lines = System.IO.File.ReadAllLines(@"./Levels/level2.txt");
         private Dictionary<string, TextureName> textureNameMap;
         
         public GameScene(
@@ -92,6 +93,14 @@ namespace Breakout
                     ball.position.X = paddle.Right;
                 }
             }
+
+            foreach(var block in blocks) {
+                if (Collision.DidCollide(ball, block)) {
+                    block.OnCollide(Side.Bottom);
+                }
+            }
+
+            blocks = blocks.Where(block => !block.delete).ToList();
 
 
             if (ball.Top <= 0)

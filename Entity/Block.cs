@@ -4,16 +4,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
-    public class Block : IGameObject
+    public class Block : IGameObject, IRectangle
     {
         private static readonly int BLOCK_HEIGHT = 28;
         private static readonly int BLOCK_WIDTH = 96;
         private static readonly int LEFT_OFFSET = 64;
         private TextureName textureName;
         private Texture2D Texture => Store.textures.Get(textureName);
-        private bool delete = false;
+        public bool delete = false;
         private int row;
         private int col;
+
+        public float Top => row * BLOCK_HEIGHT;
+        public float Bottom => Top + BLOCK_HEIGHT;
+        public float Left => col * BLOCK_WIDTH;
+        public float Right => Left + BLOCK_WIDTH;
         
         public Block(int col, int row, TextureName textureName)
         {
