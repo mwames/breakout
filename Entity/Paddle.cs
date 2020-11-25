@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
-    public class Paddle
+    public class Paddle : IGameObject
     {
         public int speed;
         public Vector2 position;
@@ -37,7 +37,7 @@ namespace Breakout
             return position.X + texture.Width < global::Breakout.Window.WIDTH;
         }
 
-        public void update(GameTime gameTime, KeyboardState kState)
+        public void Update(GameTime gameTime, KeyboardState kState)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -51,7 +51,7 @@ namespace Breakout
             }
         }
 
-        public void update(GameTime gameTime, GamePadState gState)
+        public void Update(GameTime gameTime, GamePadState gState)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -73,7 +73,7 @@ namespace Breakout
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch) {
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spritefont) {
             // Draws the ball
             spriteBatch.Draw(texture, new Vector2(position.X, position.Y), Color.White);
 
@@ -98,6 +98,10 @@ namespace Breakout
                 var bottom = new Vector2((int)Center.X, (int)Bottom);
                 Dot.Draw(spriteBatch, bottom, texture);
             }
+        }
+
+        public void OnCollide(Side sideOfImpact) {
+
         }
     }
 }

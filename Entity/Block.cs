@@ -1,9 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
-    public class Block
+    public class Block : IGameObject
     {
         private static readonly int BLOCK_HEIGHT = 28;
         private static readonly int BLOCK_WIDTH = 96;
@@ -25,14 +26,19 @@ namespace Breakout
             return LEFT_OFFSET + i * BLOCK_WIDTH;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
             var x = col * BLOCK_WIDTH;
             var y = row * BLOCK_HEIGHT;
             spriteBatch.Draw(Texture, new Vector2(x, y), Color.White);
         }
 
-        public void onCollide() {
+        public void Update(GameTime gameTime, GamePadState gState)
+        {
+
+        }
+        
+        public void OnCollide(Side sideOfImpact) {
             delete = true;
         }
     }

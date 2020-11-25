@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,13 +11,12 @@ namespace Breakout
     {
         private Paddle paddle;
         public Ball ball;
-        private Block red;
-        private Block gold;
-        private Block blue;
-        private Block green;
+        private List<Block> blocks;
 
         private GameWindow Window;
         private SoundEffect ballSound;
+        private string[] lines = System.IO.File.ReadAllLines(@"./Levels/level1.txt");
+        private Dictionary<string, TextureName> textureNameMap;
         
         public GameScene(
             Paddle paddle,
@@ -30,10 +30,30 @@ namespace Breakout
             this.ball = ball;
             this.Window = Window;
             this.ballSound = ballSound;
-            this.red = new Block(1, 1, TextureName.RedBlock);
-            this.gold = new Block(1, 2, TextureName.GoldBlock);
-            this.green = new Block(2, 1, TextureName.GreenBlock);
-            this.blue = new Block(2, 2, TextureName.BlueBlock);
+            this.blocks = new List<Block>();
+            this.textureNameMap = CreateTextureDictionary();
+            foreach(var line in lines) {
+                if (line != "") {
+                    Console.WriteLine(line.Split(",")[0]);
+                    var parts = line.Split(",");
+                    blocks.Add(new Block(
+                        Int32.Parse(parts[0]),
+                        Int32.Parse(parts[1]),
+                        textureNameMap[parts[2]]
+                        )
+                    );
+                }
+            }
+        }
+
+        private Dictionary<string, TextureName> CreateTextureDictionary() {
+            return new Dictionary<string, TextureName>()
+            {
+                {"red", TextureName.RedBlock},
+                {"gold", TextureName.GoldBlock},
+                {"green", TextureName.GreenBlock},
+                {"blue", TextureName.BlueBlock}
+            };
         }
 
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
@@ -43,9 +63,9 @@ namespace Breakout
             }
 
             if (gamePadState.IsConnected)
-                paddle.update(gameTime, gamePadState);
+                paddle.Update(gameTime, gamePadState);
             else
-                paddle.update(gameTime, keyboardState);
+                paddle.Update(gameTime, keyboardState);
 
             ball.Update(gameTime, gamePadState);
 
@@ -114,12 +134,12 @@ namespace Breakout
             }
 
             ball.Draw(spriteBatch, spriteFont);
-            paddle.Draw(spriteBatch);
+            paddle.Draw(spriteBatch, spriteFont);
+            foreach(var block in blocks)
+            {
+                block.Draw(spriteBatch, spriteFont);
+            }
             spriteBatch.DrawString(spriteFont, "Points: ", new Vector2(3, 3), Color.Black);
-            red.Draw(spriteBatch);
-            blue.Draw(spriteBatch);
-            gold.Draw(spriteBatch);
-            green.Draw(spriteBatch);
         }
 
         public override string ToString()
