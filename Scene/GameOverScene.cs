@@ -6,12 +6,6 @@ namespace Breakout
 {
     public class GameOverScene : IScene
     {
-        private GameWindow Window;
-
-        public GameOverScene(GameWindow Window) {
-            this.Window = Window;
-        }
-
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
 
@@ -21,7 +15,7 @@ namespace Breakout
         {
                 string gameOverMessage = "You have died!";
                 graphicsDevice.Clear(Color.Yellow);
-                spriteBatch.DrawString(spriteFont, gameOverMessage, new Vector2(Window.ClientBounds.Width / 3 , Window.ClientBounds.Height /2), Color.Black);
+                spriteBatch.DrawString(spriteFont, gameOverMessage, new Vector2(GameWindow.WIDTH / 3 , GameWindow.HEIGHT /2), Color.Black);
         }
     }
 }

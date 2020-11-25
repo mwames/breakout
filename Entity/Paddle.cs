@@ -34,7 +34,7 @@ namespace Breakout
 
         private bool isInBoundRight()
         {
-            return position.X + texture.Width < global::Breakout.Window.WIDTH;
+            return position.X + texture.Width < GameWindow.WIDTH;
         }
 
         public void Update(GameTime gameTime, KeyboardState kState)

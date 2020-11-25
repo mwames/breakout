@@ -32,6 +32,7 @@ namespace Breakout
             // Set up window
             Window.AllowUserResizing = true;
             Window.Position = new Point(200, 200);
+            Window.Title = "Depression Ball";
             graphics = new GraphicsDeviceManager(this);
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
@@ -43,8 +44,8 @@ namespace Breakout
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphics.PreferredBackBufferWidth = global::Breakout.Window.WIDTH;
-            graphics.PreferredBackBufferHeight = global::Breakout.Window.HEIGHT;
+            graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
+            graphics.PreferredBackBufferHeight = GameWindow.HEIGHT;
             graphics.ApplyChanges();
             Store.textures = new TextureManager();
 
@@ -66,10 +67,10 @@ namespace Breakout
            
             // Set up Scenes
             Store.scenes = new SceneManager();
-            Store.scenes.Add(SceneName.Menu, new MainMenuScene(Window));
-            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball, Window, MySounds.ballSound));
-            Store.scenes.Add(SceneName.GameOver, new GameOverScene(Window));
-            Store.scenes.Add(SceneName.Pause, new PauseScene(Window));
+            Store.scenes.Add(SceneName.Menu, new MainMenuScene());
+            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball, MySounds.ballSound));
+            Store.scenes.Add(SceneName.GameOver, new GameOverScene());
+            Store.scenes.Add(SceneName.Pause, new PauseScene());
             Store.scenes.currentScene = Store.scenes.Get(SceneName.Menu);
 
             base.Initialize();

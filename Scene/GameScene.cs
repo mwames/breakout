@@ -13,8 +13,6 @@ namespace Breakout
         private Paddle paddle;
         public Ball ball;
         private List<Block> blocks;
-
-        private GameWindow Window;
         private SoundEffect ballSound;
         private string[] lines = System.IO.File.ReadAllLines(@"./Levels/level2.txt");
         public int score;
@@ -23,20 +21,17 @@ namespace Breakout
         public GameScene(
             Paddle paddle,
             Ball ball,
-            GameWindow Window,
             SoundEffect ballSound
             
         )
         {
             this.paddle = paddle;
             this.ball = ball;
-            this.Window = Window;
             this.ballSound = ballSound;
             this.blocks = new List<Block>();
             this.textureNameMap = CreateTextureDictionary();
             foreach(var line in lines) {
                 if (line != "") {
-                    Console.WriteLine(line.Split(",")[0]);
                     var parts = line.Split(",");
                     blocks.Add(new Block(
                         Int32.Parse(parts[0]),
@@ -122,17 +117,17 @@ namespace Breakout
                 // ballSound.Play();
             }
 
-            if (ball.Right >= Window.ClientBounds.Width)
+            if (ball.Right >= GameWindow.WIDTH)
             {
                 ball.OnCollide(Side.Right);
-                ball.position.X = Window.ClientBounds.Width - ball.radius * 2;
+                ball.position.X = GameWindow.WIDTH - ball.radius * 2;
                 // ballSound.Play();
             }
 
-            if (ball.Bottom >= Window.ClientBounds.Height)
+            if (ball.Bottom >= GameWindow.HEIGHT)
             {
                 ball.OnCollide(Side.Bottom);
-                ball.position.Y = Window.ClientBounds.Height - ball.radius * 2;
+                ball.position.Y = GameWindow.HEIGHT - ball.radius * 2;
                 paddle.health--;
 
                 if (paddle.health <= 0)
@@ -144,7 +139,7 @@ namespace Breakout
         {
             for (int i = 0; i < paddle.health; i++)
             {
-                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, global::Breakout.Window.HEIGHT - 63), Color.White);
+                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, GameWindow.HEIGHT - 63), Color.White);
             }
 
             ball.Draw(spriteBatch, spriteFont);

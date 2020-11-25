@@ -8,13 +8,7 @@ namespace Breakout
     {
         readonly int OFFSET = 50;
         readonly string MESSAGE = "Press enter to begin!";
-        GameWindow Window;
-
-        public MainMenuScene(GameWindow Window)
-        {
-            this.Window = Window;
-        }
-
+        
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
 
@@ -28,7 +22,7 @@ namespace Breakout
         {
             spriteBatch.Draw(
                 Store.textures.Get(TextureName.TitleScreen),
-                new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height),
+                new Rectangle(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT),
                 Color.White
             );
 
@@ -36,8 +30,8 @@ namespace Breakout
                 spriteFont,
                 MESSAGE,
                 new Vector2(
-                    Window.ClientBounds.Width / 2 - spriteFont.MeasureString(MESSAGE).X / 2,
-                    Window.ClientBounds.Height - OFFSET
+                    GameWindow.WIDTH / 2 - spriteFont.MeasureString(MESSAGE).X / 2,
+                    GameWindow.HEIGHT - OFFSET
                 ),
                 Color.Black
                 );

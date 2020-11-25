@@ -6,12 +6,6 @@ namespace Breakout
 {
     public class PauseScene : IScene
     {
-        private GameWindow Window;
-
-        public PauseScene(GameWindow Window) {
-            this.Window = Window;
-        }
-
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
             string gameOverMessage = "- PAUSE -";
@@ -20,8 +14,8 @@ namespace Breakout
                 spriteFont,
                 gameOverMessage,
                 new Vector2(
-                    global::Breakout.Window.WIDTH / 2 - spriteFont.MeasureString(gameOverMessage).X / 2,
-                    global::Breakout.Window.HEIGHT / 2 - 20
+                    GameWindow.WIDTH / 2 - spriteFont.MeasureString(gameOverMessage).X / 2,
+                    GameWindow.HEIGHT / 2 - 20
                 ),
                 Color.Black
                 );
