@@ -6,8 +6,6 @@ namespace Breakout
 {
     public class Block : IGameObject, IRectangle
     {
-        private static readonly int BLOCK_HEIGHT = 28;
-        private static readonly int BLOCK_WIDTH = 96;
         private static readonly int LEFT_OFFSET = 64;
         private TextureName textureName;
         private Texture2D Texture => Store.textures.Get(textureName);
@@ -15,10 +13,10 @@ namespace Breakout
         private int row;
         private int col;
 
-        public float Top => row * BLOCK_HEIGHT;
-        public float Bottom => Top + BLOCK_HEIGHT;
-        public float Left => col * BLOCK_WIDTH;
-        public float Right => Left + BLOCK_WIDTH;
+        public float Top => row * Texture.Height;
+        public float Bottom => Top + Texture.Height;
+        public float Left => col * Texture.Width;
+        public float Right => Left + Texture.Width;
         
         public Block(int col, int row, TextureName textureName)
         {
@@ -28,13 +26,13 @@ namespace Breakout
         }
 
         private int HorizontalPosition(int i) {
-            return LEFT_OFFSET + i * BLOCK_WIDTH;
+            return LEFT_OFFSET + i * Texture.Width;
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
-            var x = col * BLOCK_WIDTH;
-            var y = row * BLOCK_HEIGHT;
+            var x = col * Texture.Width;
+            var y = row * Texture.Height;
             spriteBatch.Draw(Texture, new Vector2(x, y), Color.White);
         }
 

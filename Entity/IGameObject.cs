@@ -6,8 +6,8 @@ namespace Breakout
 {
     public interface IGameObject
     {
-        void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont);
         void Update(GameTime gameTime, GamePadState gState);
+        void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont);
         void OnCollide(Side sideOfImpact);
     }
 }
