@@ -5,53 +5,29 @@ namespace Breakout
 {
     public class Block
     {
-    public Block (){}
-    }
-    public class RedBlock : Block
-    {
-        private Texture2D texture => Store.textures.Get(TextureName.RedBlock);
-        public void Draw(SpriteBatch spriteBatch) {
-             for (int i = 0; i < 7; i++)
-            {
-                spriteBatch.Draw(Store.textures.Get(TextureName.RedBlock), 
-                new Vector2(64+ i * 96, global::Breakout.Window.HEIGHT/2), 
-                Color.White);
-            }
+        private static readonly int BLOCK_HEIGHT = 28;
+        private static readonly int BLOCK_WIDTH = 96;
+        private static readonly int LEFT_OFFSET = 64;
+        private int offset;
+        private TextureName textureName;
+        private Texture2D Texture => Store.textures.Get(textureName);
+        private int VerticalPosition => (global::Breakout.Window.HEIGHT / 2) - (offset * BLOCK_HEIGHT);
+        
+        public Block(TextureName textureName, int offset)
+        {
+            this.textureName = textureName;
+            this.offset = offset;
         }
-    }
-    public class GoldBlock : Block
-    {
-        public Texture2D texture => Store.textures.Get(TextureName.GoldBlock);
-        public void Draw(SpriteBatch spriteBatch) {
-             for (int i = 0; i < 7; i++)
-            {
-                spriteBatch.Draw(Store.textures.Get(TextureName.GoldBlock), 
-                new Vector2(64+ i * 96, global::Breakout.Window.HEIGHT/2 -84), 
-                Color.White);
-            }
+
+        private int HorizontalPosition(int i) {
+            return LEFT_OFFSET + i * BLOCK_WIDTH;
         }
-    }
-    public class GreenBlock : Block
-    {
-        public Texture2D texture => Store.textures.Get(TextureName.GreenBlock);
-        public void Draw(SpriteBatch spriteBatch) {
-             for (int i = 0; i < 7; i++)
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < 7; i++)
             {
-                spriteBatch.Draw(Store.textures.Get(TextureName.GreenBlock), 
-                new Vector2(64+ i * 96, global::Breakout.Window.HEIGHT/2 - 56), 
-                Color.White);
-            }
-        }
-    }
-    public class BlueBlock : Block
-    {
-        public Texture2D texture => Store.textures.Get(TextureName.BlueBlock);
-        public void Draw(SpriteBatch spriteBatch) {
-             for (int i = 0; i < 7; i++)
-            {
-                spriteBatch.Draw(Store.textures.Get(TextureName.BlueBlock), 
-                new Vector2(64+ i * 96, global::Breakout.Window.HEIGHT/2 -28), 
-                Color.White);
+                spriteBatch.Draw(Texture, new Vector2(HorizontalPosition(i), VerticalPosition), Color.White);
             }
         }
     }

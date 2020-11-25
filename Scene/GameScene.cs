@@ -12,10 +12,10 @@ namespace Breakout
         public Ball ball;
         private GameWindow Window;
         private SoundEffect ballSound;
-        private RedBlock red;
-        private GoldBlock gold;
-        private BlueBlock blue;
-        private GreenBlock green;
+        private Block red;
+        private Block gold;
+        private Block blue;
+        private Block green;
         
         public GameScene(
             Paddle paddle,
@@ -29,10 +29,10 @@ namespace Breakout
             this.ball = ball;
             this.Window = Window;
             this.ballSound = ballSound;
-            this.red = new RedBlock();
-            this.gold = new GoldBlock();
-            this.green = new GreenBlock();
-            this.blue = new BlueBlock();
+            this.red = new Block(TextureName.RedBlock, 1);
+            this.gold = new Block(TextureName.GoldBlock, 2);
+            this.green = new Block(TextureName.GreenBlock, 3);
+            this.blue = new Block(TextureName.BlueBlock, 4);
         }
 
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
