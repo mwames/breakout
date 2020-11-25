@@ -50,6 +50,12 @@
 /processorParam:TextureFormat=Compressed
 /build:gameFont.spritefont
 
+#begin gameOver.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:gameOver.ogg
+
 #begin GoldBlock.bmp
 /importer:TextureImporter
 /processor:TextureProcessor

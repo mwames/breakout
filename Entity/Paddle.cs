@@ -24,7 +24,7 @@ namespace Breakout
         {
             this.position = position;
             this.speed = speed;
-            this.health = 3;
+            this.health = 1;
         }
 
         private bool isInBoundLeft()

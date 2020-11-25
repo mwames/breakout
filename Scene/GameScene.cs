@@ -17,6 +17,7 @@ namespace Breakout
         private GameWindow Window;
         private SoundEffect ballSound;
         private string[] lines = System.IO.File.ReadAllLines(@"./Levels/level2.txt");
+        public int score;
         private Dictionary<string, TextureName> textureNameMap;
         
         public GameScene(
@@ -77,6 +78,7 @@ namespace Breakout
                 {
                     ball.OnCollide(Side.Bottom);
                     ball.position.Y = paddle.Top - ball.radius * 2;
+                    score ++;
                 }
 
                 // Left was hit
@@ -84,6 +86,7 @@ namespace Breakout
                 {
                     ball.OnCollide(Side.Left);
                     ball.position.X = paddle.Left - ball.radius * 2;
+                    score ++;
                 }
 
                 // Right was hit
@@ -91,12 +94,14 @@ namespace Breakout
                 {
                     ball.OnCollide(Side.Right);
                     ball.position.X = paddle.Right;
+                    score ++;
                 }
             }
 
             foreach(var block in blocks) {
                 if (Collision.DidCollide(ball, block)) {
                     block.OnCollide(Side.Bottom);
+                    score +=5;
                 }
             }
 
@@ -148,7 +153,7 @@ namespace Breakout
             {
                 block.Draw(spriteBatch, spriteFont);
             }
-            spriteBatch.DrawString(spriteFont, "Points: ", new Vector2(3, 3), Color.Black);
+            spriteBatch.DrawString(spriteFont, "Points: " + score.ToString(), new Vector2(3, 3), Color.Black);
         }
 
         public override string ToString()

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Breakout
 {
@@ -14,11 +15,17 @@ namespace Breakout
         private SpriteFont gameFont;
         private Paddle paddle;
         
-        private SoundEffect ballSound;
+        
         private KeyboardState previousKeyboardState;
         private KeyboardState keyboardState;
         private GamePadState gamePadState;
         private GamePadState previousGamePadState;
+
+        public static class MySounds
+        {
+            public static SoundEffect ballSound;
+            public static Song gameOver;
+        }
 
         public Breakout()
         {
@@ -60,7 +67,7 @@ namespace Breakout
             // Set up Scenes
             Store.scenes = new SceneManager();
             Store.scenes.Add(SceneName.Menu, new MainMenuScene(Window));
-            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball, Window, ballSound));
+            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball, Window, MySounds.ballSound));
             Store.scenes.Add(SceneName.GameOver, new GameOverScene(Window));
             Store.scenes.Add(SceneName.Pause, new PauseScene(Window));
             Store.scenes.currentScene = Store.scenes.Get(SceneName.Menu);
@@ -79,7 +86,10 @@ namespace Breakout
             Store.textures.Add(TextureName.BlueBlock, Content.Load<Texture2D>("BlueBlock"));
             Store.textures.Add(TextureName.GreenBlock, Content.Load<Texture2D>("GreenBlock"));
             gameFont = Content.Load<SpriteFont>("gameFont");
-            ballSound = Content.Load<SoundEffect>("ballSound");
+            MySounds.ballSound = Content.Load<SoundEffect>("ballSound");
+            MySounds.gameOver = Content.Load<Song>("gameOver");
+            MediaPlayer.Play(MySounds.gameOver);
+            MediaPlayer.IsRepeating = true;
             
         }
 
