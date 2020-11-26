@@ -125,6 +125,27 @@ namespace Breakout
 
         private void LoadLevel()
         {
+            int totalLevels = System.IO.Directory.GetFiles($@"./Levels/").Count();
+           if (currentLevel < totalLevels)
+           {
+             var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
+             foreach (var line in lines)
+             {
+                 if (line != "")
+                 {
+                     var parts = line.Split(",");
+                     blocks.Add(new Block(
+                         Int32.Parse(parts[0]),
+                         Int32.Parse(parts[1]),
+                        textureNameMap[parts[2]]
+                         )
+                    );
+                }
+            }
+           }
+           
+           else
+           {
             Random random = new Random();
             var count = random.Next(12, 25);
 
@@ -136,22 +157,7 @@ namespace Breakout
 
                 blocks.Add(new Block(col, row, color));
             }
-
-            // var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
-            // foreach (var line in lines)
-            // {
-            //     if (line != "")
-            //     {
-            //         var parts = line.Split(",");
-            //         blocks.Add(new Block(
-            //             Int32.Parse(parts[0]),
-            //             Int32.Parse(parts[1]),
-            //             textureNameMap[parts[2]]
-            //             )
-            //         );
-            //     }
-            // }
-
+           }
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
