@@ -18,7 +18,7 @@ namespace Breakout
     
     public class TextureManager
     {
-        private Dictionary<TextureName, Texture2D> textures = new Dictionary<TextureName, Texture2D>();
+        public Dictionary<TextureName, Texture2D> textures = new Dictionary<TextureName, Texture2D>();
 
         public void Add(TextureName name, Texture2D texture)
         {

@@ -27,12 +27,12 @@ namespace Breakout
             this.health = 1;
         }
 
-        private bool isInBoundLeft()
+        public bool isInBoundLeft()
         {
             return position.X > 0;
         }
 
-        private bool isInBoundRight()
+        public bool isInBoundRight()
         {
             return position.X + texture.Width < GameWindow.WIDTH;
         }

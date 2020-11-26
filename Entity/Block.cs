@@ -6,12 +6,12 @@ namespace Breakout
 {
     public class Block : IGameObject, IRectangle
     {
-        private static readonly int LEFT_OFFSET = 64;
-        private TextureName textureName;
-        private Texture2D Texture => Store.textures.Get(textureName);
+        public static readonly int LEFT_OFFSET = 64;
+        public TextureName textureName;
+        public Texture2D Texture => Store.textures.Get(textureName);
         public bool delete = false;
-        private int row;
-        private int col;
+        public int row;
+        public int col;
 
         public float Top => row * Texture.Height;
         public float Bottom => Top + Texture.Height;
@@ -25,7 +25,7 @@ namespace Breakout
             this.col = col;
         }
 
-        private int HorizontalPosition(int i) {
+        public int HorizontalPosition(int i) {
             return LEFT_OFFSET + i * Texture.Width;
         }
 
@@ -34,12 +34,6 @@ namespace Breakout
             var x = col * Texture.Width;
             var y = row * Texture.Height;
             spriteBatch.Draw(Texture, new Vector2(x, y), Color.White);
-        }
-
-        public void DrawMuted(SpriteBatch spriteBatch) {
-            var x = col * Texture.Width;
-            var y = row * Texture.Height;
-            spriteBatch.Draw(Texture, new Vector2(x, y), new Color(250,255,250));
         }
 
         public void Update(GameTime gameTime, GamePadState gState)

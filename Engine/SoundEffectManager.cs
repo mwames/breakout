@@ -9,7 +9,7 @@ namespace Breakout
 
     public class SoundEffectManager
     {
-        private Dictionary<SoundEffectName, SoundEffect> soundEffects = new Dictionary<SoundEffectName, SoundEffect>();
+        public Dictionary<SoundEffectName, SoundEffect> soundEffects = new Dictionary<SoundEffectName, SoundEffect>();
 
         public void Add(SoundEffectName name, SoundEffect soundEffect)
         {

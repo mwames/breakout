@@ -10,12 +10,12 @@ namespace Breakout
 {
     public class GameScene : IScene
     {
-        private Paddle paddle;
+        public Paddle paddle;
         public Ball ball;
-        private List<Block> blocks;
+        public List<Block> blocks;
         public int score;
         public int currentLevel = 1;
-        private Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
+        public Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
         {
             {"red", TextureName.RedBlock},
             {"gold", TextureName.GoldBlock},
@@ -123,7 +123,7 @@ namespace Breakout
             }
         }
 
-        private void LoadLevel()
+        public void LoadLevel()
         {
             int totalLevels = System.IO.Directory.GetFiles($@"./Levels/").Count();
            if (currentLevel < totalLevels)

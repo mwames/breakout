@@ -11,7 +11,7 @@ namespace Breakout
     public class SongManager
     {
         public SongName selected;
-        private Dictionary<SongName, Song> songs = new Dictionary<SongName, Song>();
+        public Dictionary<SongName, Song> songs = new Dictionary<SongName, Song>();
 
         public void Add(SongName name, Song song)
         {

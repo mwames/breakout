@@ -16,7 +16,7 @@ namespace Breakout
     {
         public SceneName sceneName;
         public IScene Scene => scenes[sceneName];
-        private Dictionary<SceneName, IScene> scenes = new Dictionary<SceneName, IScene>();
+        public Dictionary<SceneName, IScene> scenes = new Dictionary<SceneName, IScene>();
 
         public void Add(SceneName name, IScene scene) {
             scenes.Add(name, scene);

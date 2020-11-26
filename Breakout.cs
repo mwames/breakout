@@ -8,18 +8,18 @@ namespace Breakout
 {
     public class Breakout : Game
     {
-        private Ball ball;
-        private Player player = new Player(PlayerIndex.One);
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private SpriteFont gameFont;
-        private Paddle paddle;
+        public Ball ball;
+        public Player player = new Player(PlayerIndex.One);
+        public GraphicsDeviceManager graphics;
+        public SpriteBatch spriteBatch;
+        public SpriteFont gameFont;
+        public Paddle paddle;
         
         
-        private KeyboardState previousKeyboardState;
-        private KeyboardState keyboardState;
-        private GamePadState gamePadState;
-        private GamePadState previousGamePadState;
+        public KeyboardState previousKeyboardState;
+        public KeyboardState keyboardState;
+        public GamePadState gamePadState;
+        public GamePadState previousGamePadState;
 
         public Breakout()
         {
