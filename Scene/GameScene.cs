@@ -13,8 +13,6 @@ namespace Breakout
         private Paddle paddle;
         public Ball ball;
         private List<Block> blocks;
-        private SoundEffect ballSound;
-        private string test = "./Levels/level2.txt";
         public int score;
         public int currentLevel = 1;
         private Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
@@ -128,7 +126,7 @@ namespace Breakout
         private void LoadLevel()
         {
             Random random = new Random();
-            var count = random.Next(8, 15);
+            var count = random.Next(12, 25);
 
             for (var i = 0; i < count; i += 1)
             {

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -11,7 +9,6 @@ namespace Breakout
     public class EditorScene : IScene
     {
         private List<Block> blocks;
-        private SoundEffect ballSound;
         private string[] lines = System.IO.File.ReadAllLines(@"./Levels/palette.txt");
         public int score;
         private Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
