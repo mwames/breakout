@@ -1,15 +1,19 @@
 namespace Breakout
 {
-    public enum Mode {
+    public enum Mode
+    {
+        None,
         Normal,
         Debug,
         Editor
     }
 
-    public static class ModeManager {
+    public static class ModeManager
+    {
         public static Mode currentMode = Mode.Normal;
 
-        public static void Toggle(Mode mode) {
+        public static void Toggle(Mode mode)
+        {
             if (mode == Mode.Normal || currentMode == mode)
                 currentMode = Mode.Normal;
             else

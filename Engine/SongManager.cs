@@ -3,11 +3,12 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Breakout
 {
-    public enum SongName {
+    public enum SongName
+    {
         None,
         GameOver,
     }
-    
+
     public class SongManager
     {
         public SongName selected;
@@ -18,15 +19,18 @@ namespace Breakout
             songs.Add(name, song);
         }
 
-        public void Play(SongName requested) {
-            if(selected != requested) {
+        public void Play(SongName requested)
+        {
+            if (selected != requested)
+            {
                 selected = requested;
                 MediaPlayer.Play(songs[requested]);
                 MediaPlayer.IsRepeating = true;
             }
         }
 
-        public void Pause() {
+        public void Pause()
+        {
             MediaPlayer.Pause();
         }
     }

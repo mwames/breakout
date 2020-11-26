@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Breakout
 {
-    public enum SoundEffectName {
+    public enum SoundEffectName
+    {
+        None,
         BallSound,
     }
 

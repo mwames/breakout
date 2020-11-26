@@ -3,8 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Breakout
 {
-        public enum TextureName
+    public enum TextureName
     {
+        None,
         Ball,
         Paddle,
         GameFont,
@@ -17,7 +18,7 @@ namespace Breakout
         PlayButton,
         OptionsButton,
     }
-    
+
     public class TextureManager
     {
         public Dictionary<TextureName, Texture2D> textures = new Dictionary<TextureName, Texture2D>();
