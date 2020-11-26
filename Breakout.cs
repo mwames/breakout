@@ -84,6 +84,8 @@ namespace Breakout
             Store.textures.Add(TextureName.GoldBlock, Content.Load<Texture2D>("GoldBlock"));
             Store.textures.Add(TextureName.BlueBlock, Content.Load<Texture2D>("BlueBlock"));
             Store.textures.Add(TextureName.GreenBlock, Content.Load<Texture2D>("GreenBlock"));
+            Store.textures.Add(TextureName.PlayButton, Content.Load<Texture2D>("PlayButton"));
+            Store.textures.Add(TextureName.OptionsButton, Content.Load<Texture2D>("OptionsButton"));
             Store.soundEffects.Add(SoundEffectName.BallSound, Content.Load<SoundEffect>("ballSound"));
             Store.songs.Add(SongName.GameOver, Content.Load<Song>("gameOver"));
             gameFont = Content.Load<SpriteFont>("gameFont");
