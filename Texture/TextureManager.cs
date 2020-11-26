@@ -14,6 +14,8 @@ namespace Breakout
         GoldBlock,
         BlueBlock,
         GreenBlock,
+        PlayButton,
+        OptionsButton,
     }
     
     public class TextureManager
