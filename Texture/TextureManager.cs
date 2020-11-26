@@ -3,6 +3,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Breakout
 {
+        public enum TextureName
+    {
+        Ball,
+        Paddle,
+        GameFont,
+        TitleScreen,
+        Heart,
+        RedBlock,
+        GoldBlock,
+        BlueBlock,
+        GreenBlock,
+    }
+    
     public class TextureManager
     {
         private Dictionary<TextureName, Texture2D> textures = new Dictionary<TextureName, Texture2D>();

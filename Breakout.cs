@@ -21,12 +21,6 @@ namespace Breakout
         private GamePadState gamePadState;
         private GamePadState previousGamePadState;
 
-        public static class MySounds
-        {
-            public static SoundEffect ballSound;
-            public static Song gameOver;
-        }
-
         public Breakout()
         {
             // Set up window
@@ -68,10 +62,14 @@ namespace Breakout
             // Set up Scenes
             Store.scenes = new SceneManager();
             Store.scenes.Add(SceneName.Menu, new MainMenuScene());
-            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball, MySounds.ballSound));
+            Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball));
             Store.scenes.Add(SceneName.GameOver, new GameOverScene());
             Store.scenes.Add(SceneName.Pause, new PauseScene());
+            Store.scenes.Add(SceneName.Editor, new EditorScene());
             Store.scenes.currentScene = Store.scenes.Get(SceneName.Menu);
+
+            Store.soundEffects = new SoundEffectManager();
+            Store.songs = new SongManager();
 
             base.Initialize();
         }
@@ -86,12 +84,9 @@ namespace Breakout
             Store.textures.Add(TextureName.GoldBlock, Content.Load<Texture2D>("GoldBlock"));
             Store.textures.Add(TextureName.BlueBlock, Content.Load<Texture2D>("BlueBlock"));
             Store.textures.Add(TextureName.GreenBlock, Content.Load<Texture2D>("GreenBlock"));
+            Store.soundEffects.Add(SoundEffectName.BallSound, Content.Load<SoundEffect>("ballSound"));
+            Store.songs.Add(SongName.GameOver, Content.Load<Song>("gameOver"));
             gameFont = Content.Load<SpriteFont>("gameFont");
-            MySounds.ballSound = Content.Load<SoundEffect>("ballSound");
-            MySounds.gameOver = Content.Load<Song>("gameOver");
-            MediaPlayer.Play(MySounds.gameOver);
-            MediaPlayer.IsRepeating = true;
-            
         }
 
         protected override void Update(GameTime gameTime)

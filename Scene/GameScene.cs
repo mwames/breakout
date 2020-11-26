@@ -14,48 +14,30 @@ namespace Breakout
         public Ball ball;
         private List<Block> blocks;
         private SoundEffect ballSound;
-        private string[] lines = System.IO.File.ReadAllLines(@"./Levels/level2.txt");
+        private string test = "./Levels/level2.txt";
         public int score;
-        private Dictionary<string, TextureName> textureNameMap;
-        
-        public GameScene(
-            Paddle paddle,
-            Ball ball,
-            SoundEffect ballSound
-            
-        )
+        public int currentLevel = 1;
+        private Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
+        {
+            {"red", TextureName.RedBlock},
+            {"gold", TextureName.GoldBlock},
+            {"green", TextureName.GreenBlock},
+            {"blue", TextureName.BlueBlock}
+        };
+
+        public GameScene(Paddle paddle,Ball ball)
         {
             this.paddle = paddle;
             this.ball = ball;
-            this.ballSound = ballSound;
             this.blocks = new List<Block>();
-            this.textureNameMap = CreateTextureDictionary();
-            foreach(var line in lines) {
-                if (line != "") {
-                    var parts = line.Split(",");
-                    blocks.Add(new Block(
-                        Int32.Parse(parts[0]),
-                        Int32.Parse(parts[1]),
-                        textureNameMap[parts[2]]
-                        )
-                    );
-                }
-            }
-        }
+            LoadLevel();
 
-        private Dictionary<string, TextureName> CreateTextureDictionary() {
-            return new Dictionary<string, TextureName>()
-            {
-                {"red", TextureName.RedBlock},
-                {"gold", TextureName.GoldBlock},
-                {"green", TextureName.GreenBlock},
-                {"blue", TextureName.BlueBlock}
-            };
         }
 
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
-            if ((!previousGamePadState.IsButtonDown(Buttons.Start) && gamePadState.IsButtonDown(Buttons.Start)) || (!previousKeyboardState.IsKeyDown(Keys.Space) && keyboardState.IsKeyDown(Keys.Space))) {
+            if ((!previousGamePadState.IsButtonDown(Buttons.Start) && gamePadState.IsButtonDown(Buttons.Start)) || (!previousKeyboardState.IsKeyDown(Keys.Space) && keyboardState.IsKeyDown(Keys.Space)))
+            {
                 Store.scenes.currentScene = Store.scenes.Get(SceneName.Pause);
             }
 
@@ -73,7 +55,13 @@ namespace Breakout
                 {
                     ball.OnCollide(Side.Bottom);
                     ball.position.Y = paddle.Top - ball.radius * 2;
-                    score ++;
+                    score++;
+
+                    if (blocks.Count == 0)
+                    {
+                        currentLevel += 1;
+                        LoadLevel();
+                    }
                 }
 
                 // Left was hit
@@ -81,7 +69,7 @@ namespace Breakout
                 {
                     ball.OnCollide(Side.Left);
                     ball.position.X = paddle.Left - ball.radius * 2;
-                    score ++;
+                    score++;
                 }
 
                 // Right was hit
@@ -89,14 +77,16 @@ namespace Breakout
                 {
                     ball.OnCollide(Side.Right);
                     ball.position.X = paddle.Right;
-                    score ++;
+                    score++;
                 }
             }
 
-            foreach(var block in blocks) {
-                if (Collision.DidCollide(ball, block)) {
+            foreach (var block in blocks)
+            {
+                if (Collision.DidCollide(ball, block))
+                {
                     block.OnCollide(Side.Bottom);
-                    score +=5;
+                    score += 5;
                 }
             }
 
@@ -107,21 +97,21 @@ namespace Breakout
             {
                 ball.OnCollide(Side.Top);
                 ball.position.Y = 0;
-                // ballSound.Play();
+                Store.soundEffects.Get(SoundEffectName.BallSound).Play();
             }
 
             if (ball.Left <= 0)
             {
                 ball.OnCollide(Side.Left);
                 ball.position.X = 0;
-                // ballSound.Play();
+                Store.soundEffects.Get(SoundEffectName.BallSound).Play();
             }
 
             if (ball.Right >= GameWindow.WIDTH)
             {
                 ball.OnCollide(Side.Right);
                 ball.position.X = GameWindow.WIDTH - ball.radius * 2;
-                // ballSound.Play();
+                Store.soundEffects.Get(SoundEffectName.BallSound).Play();
             }
 
             if (ball.Bottom >= GameWindow.HEIGHT)
@@ -135,6 +125,37 @@ namespace Breakout
             }
         }
 
+        private void LoadLevel()
+        {
+            Random random = new Random();
+            var count = random.Next(8, 15);
+
+            for (var i = 0; i < count; i += 1)
+            {
+                var col = random.Next(0, 5);
+                var row = random.Next(2, 10);
+                TextureName color = (TextureName)random.Next(5, 9);
+
+                blocks.Add(new Block(col, row, color));
+            }
+
+            // var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
+            // foreach (var line in lines)
+            // {
+            //     if (line != "")
+            //     {
+            //         var parts = line.Split(",");
+            //         blocks.Add(new Block(
+            //             Int32.Parse(parts[0]),
+            //             Int32.Parse(parts[1]),
+            //             textureNameMap[parts[2]]
+            //             )
+            //         );
+            //     }
+            // }
+
+        }
+
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
             for (int i = 0; i < paddle.health; i++)
@@ -144,7 +165,7 @@ namespace Breakout
 
             ball.Draw(spriteBatch, spriteFont);
             paddle.Draw(spriteBatch, spriteFont);
-            foreach(var block in blocks)
+            foreach (var block in blocks)
             {
                 block.Draw(spriteBatch, spriteFont);
             }

@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace Breakout
 {
+        public enum SceneName
+    {
+        Menu,
+        Game,
+        GameOver,
+        Pause,
+        Editor
+    }
+    
     public class SceneManager
     {
         public IScene currentScene;

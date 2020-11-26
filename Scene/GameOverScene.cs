@@ -8,7 +8,7 @@ namespace Breakout
     {
         public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
-
+            Store.songs.Play(SongName.GameOver);
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
