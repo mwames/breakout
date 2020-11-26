@@ -14,7 +14,7 @@ namespace Breakout
 
             if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.IsButtonDown(Buttons.Start))
             {
-                Store.scenes.currentScene = Store.scenes.Get(SceneName.Game);
+                Store.scenes.ChangeScene(SceneName.Game);
             }
         }
 

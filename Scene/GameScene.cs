@@ -36,7 +36,7 @@ namespace Breakout
         {
             if ((!previousGamePadState.IsButtonDown(Buttons.Start) && gamePadState.IsButtonDown(Buttons.Start)) || (!previousKeyboardState.IsKeyDown(Keys.Space) && keyboardState.IsKeyDown(Keys.Space)))
             {
-                Store.scenes.currentScene = Store.scenes.Get(SceneName.Pause);
+                Store.scenes.ChangeScene(SceneName.Pause);
             }
 
             if (gamePadState.IsConnected)
@@ -119,7 +119,7 @@ namespace Breakout
                 paddle.health--;
 
                 if (paddle.health <= 0)
-                    Store.scenes.currentScene = Store.scenes.Get(SceneName.GameOver);
+                    Store.scenes.ChangeScene(SceneName.GameOver);
             }
         }
 

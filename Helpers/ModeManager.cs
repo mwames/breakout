@@ -1,8 +1,9 @@
 namespace Breakout
 {
     public enum Mode {
+        Normal,
         Debug,
-        Normal
+        Editor
     }
 
     public static class ModeManager {

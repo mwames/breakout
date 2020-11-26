@@ -66,7 +66,7 @@ namespace Breakout
             Store.scenes.Add(SceneName.GameOver, new GameOverScene());
             Store.scenes.Add(SceneName.Pause, new PauseScene());
             Store.scenes.Add(SceneName.Editor, new EditorScene());
-            Store.scenes.currentScene = Store.scenes.Get(SceneName.Menu);
+            Store.scenes.ChangeScene(SceneName.Editor);
 
             Store.soundEffects = new SoundEffectManager();
             Store.songs = new SongManager();
@@ -103,7 +103,25 @@ namespace Breakout
             if (keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
                 ModeManager.Toggle(Mode.Debug);
 
-            Store.scenes.currentScene.Update(
+            if (keyboardState.IsKeyDown(Keys.F2) && !(previousKeyboardState.IsKeyDown(Keys.F2)))
+            {
+                if (Store.scenes.sceneName == SceneName.Editor)
+                    Store.scenes.ChangeScene(SceneName.Game);
+                else
+                    Store.scenes.ChangeScene(SceneName.Editor);
+            }
+
+            if (Store.scenes.sceneName == SceneName.Editor) {
+                graphics.PreferredBackBufferWidth = 1024;
+                graphics.ApplyChanges();
+            }
+            else
+            {
+                graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
+                graphics.ApplyChanges();
+            }
+
+            Store.scenes.Scene.Update(
                 gamePadState,
                 previousGamePadState,
                 keyboardState,
@@ -118,7 +136,7 @@ namespace Breakout
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            Store.scenes.currentScene.Draw(spriteBatch, gameFont, GraphicsDevice);
+            Store.scenes.Scene.Draw(spriteBatch, gameFont, GraphicsDevice);
             spriteBatch.End();
 
             base.Draw(gameTime);

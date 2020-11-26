@@ -14,15 +14,16 @@ namespace Breakout
     
     public class SceneManager
     {
-        public IScene currentScene;
+        public SceneName sceneName;
+        public IScene Scene => scenes[sceneName];
         private Dictionary<SceneName, IScene> scenes = new Dictionary<SceneName, IScene>();
 
         public void Add(SceneName name, IScene scene) {
             scenes.Add(name, scene);
         }
 
-        public IScene Get(SceneName name) {
-            return scenes[name];
+        public void ChangeScene(SceneName name) {
+            this.sceneName = name;
         }
     }
 }
