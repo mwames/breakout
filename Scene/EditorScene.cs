@@ -15,6 +15,7 @@ namespace Breakout
         public List<Block> blocks;
         public string[] lines = System.IO.File.ReadAllLines(@"./Levels/palette.txt");
         public int score;
+        public bool saved = false;
         public MouseState current;
         public MouseState previous;
         public KeyboardState kCurrent;
@@ -81,6 +82,7 @@ namespace Breakout
                 if (WasClicked(current, previous)) {
                     if (block.Clicked(new Vector2(current.Position.X, current.Position.Y))) {
                         currentColor = block.textureName;
+                        saved = false;
                     }
                 }
             }
@@ -99,6 +101,7 @@ namespace Breakout
             kCurrent = Keyboard.GetState();
             if(kCurrent.IsKeyDown(Keys.Enter) && !kPrevious.IsKeyDown(Keys.Enter)) {
                 SaveLevel();
+                saved = true;
             }
         }
 
@@ -139,6 +142,11 @@ namespace Breakout
             spriteBatch.DrawString(spriteFont, "X: " + current.Position.X, new Vector2(3, 3), Color.Black);
             spriteBatch.DrawString(spriteFont, "Y: " + current.Position.Y, new Vector2(3, 30), Color.Black);
             spriteBatch.DrawString(spriteFont, "Selected: " + currentColor, new Vector2(7 * 96, 3), Color.Black);
+            spriteBatch.DrawString(spriteFont, "Press enter to save level" , new Vector2(7 * 96, 120), Color.Black);
+            if (saved)
+            {
+                spriteBatch.DrawString(spriteFont, "Level saved" , new Vector2(GameWindow.WIDTH, GameWindow.HEIGHT/2), Color.Black);
+            }
         }
     }
 }
