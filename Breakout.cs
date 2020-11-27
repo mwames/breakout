@@ -14,6 +14,7 @@ namespace Breakout
         public SpriteBatch spriteBatch;
         public SpriteFont gameFont;
         public Paddle paddle;
+        public bool isFinished = false;
         
         
         public KeyboardState previousKeyboardState;
@@ -66,7 +67,13 @@ namespace Breakout
             Store.scenes.Add(SceneName.GameOver, new GameOverScene());
             Store.scenes.Add(SceneName.Pause, new PauseScene());
             Store.scenes.Add(SceneName.Editor, new EditorScene());
+            if(isFinished == false)
+            {
             Store.scenes.ChangeScene(SceneName.Editor);
+            }
+            else {
+                Store.scenes.ChangeScene(SceneName.Menu);
+            }
 
             Store.soundEffects = new SoundEffectManager();
             Store.songs = new SongManager();
@@ -102,25 +109,28 @@ namespace Breakout
             if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
+            if (isFinished ==false)
+            {
+                if (keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
                 ModeManager.Toggle(Mode.Debug);
 
-            if (keyboardState.IsKeyDown(Keys.F2) && !(previousKeyboardState.IsKeyDown(Keys.F2)))
-            {
+                if (keyboardState.IsKeyDown(Keys.F2) && !(previousKeyboardState.IsKeyDown(Keys.F2)))
+                {
                 if (Store.scenes.sceneName == SceneName.Editor)
                     Store.scenes.ChangeScene(SceneName.Game);
                 else
                     Store.scenes.ChangeScene(SceneName.Editor);
-            }
+                }
 
-            if (Store.scenes.sceneName == SceneName.Editor) {
+                if (Store.scenes.sceneName == SceneName.Editor) {
                 graphics.PreferredBackBufferWidth = 1024;
                 graphics.ApplyChanges();
-            }
-            else
-            {
+                }
+                else
+                {
                 graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
                 graphics.ApplyChanges();
+                }
             }
 
             Store.scenes.Scene.Update(

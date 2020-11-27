@@ -54,6 +54,7 @@ namespace Breakout
                     ball.OnCollide(Side.Bottom);
                     ball.position.Y = paddle.Top - ball.radius * 2;
                     score++;
+                    Store.soundEffects.Get(SoundEffectName.BallSound).Play();
 
                     if (blocks.Count == 0)
                     {
@@ -84,7 +85,8 @@ namespace Breakout
                 if (Collision.DidCollide(ball, block))
                 {
                     block.OnCollide(Side.Bottom);
-                    score += 5;
+                    score += 5000;
+                    Store.soundEffects.Get(SoundEffectName.BallSound).Play();
                 }
             }
 
@@ -164,7 +166,7 @@ namespace Breakout
         {
             for (int i = 0; i < paddle.health; i++)
             {
-                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, GameWindow.HEIGHT - 63), Color.White);
+                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, GameWindow.HEIGHT - 64), Color.White);
             }
 
             ball.Draw(spriteBatch, spriteFont);
@@ -173,7 +175,11 @@ namespace Breakout
             {
                 block.Draw(spriteBatch, spriteFont);
             }
-            spriteBatch.DrawString(spriteFont, "Points: " + score.ToString(), new Vector2(3, 3), Color.Black);
+            spriteBatch.DrawString(spriteFont, "Points: " + score.ToString(), new Vector2(GameWindow.WIDTH-190, GameWindow.HEIGHT-50), Color.Black);
+            if(score >=9999)
+            {
+                  spriteBatch.DrawString(spriteFont,"You are the truest Breakout", new Vector2(50, GameWindow.HEIGHT /2), Color.Black);
+            }
         }
 
         public override string ToString()

@@ -13,9 +13,10 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
-                string gameOverMessage = "You have died!";
-                graphicsDevice.Clear(Color.Yellow);
-                spriteBatch.DrawString(spriteFont, gameOverMessage, new Vector2(GameWindow.WIDTH / 3 , GameWindow.HEIGHT /2), Color.Black);
+                string gameOverMessage = "So sad";
+                graphicsDevice.Clear(Color.DarkBlue);
+                spriteBatch.DrawString(spriteFont, gameOverMessage, new Vector2(GameWindow.WIDTH / 3 , GameWindow.HEIGHT /2), Color.DarkGoldenrod);
+                
         }
     }
 }
