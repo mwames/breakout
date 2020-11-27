@@ -85,8 +85,9 @@ namespace Breakout
                 if (Collision.DidCollide(ball, block))
                 {
                     block.OnCollide(Side.Bottom);
-                    score += 5000;
+                    score += 5;
                     Store.soundEffects.Get(SoundEffectName.BallSound).Play();
+                    ball.OnCollide(Side.Top);
                 }
             }
 
@@ -128,7 +129,8 @@ namespace Breakout
         public void LoadLevel()
         {
             int totalLevels = System.IO.Directory.GetFiles($@"./Levels/").Count();
-           if (currentLevel < totalLevels)
+            ball.velocity = 250;
+           if (currentLevel > totalLevels)
            {
              var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
              foreach (var line in lines)
@@ -155,7 +157,7 @@ namespace Breakout
             {
                 var col = random.Next(0, 5);
                 var row = random.Next(2, 10);
-                TextureName color = (TextureName)random.Next(5, 9);
+                TextureName color = (TextureName)random.Next(6, 10);
 
                 blocks.Add(new Block(col, row, color));
             }
