@@ -5,5 +5,6 @@ namespace Breakout {
         public static SoundEffectManager soundEffects;
         public static SongManager songs;
         public static ModeManager modes;
+        public static int lives;
     }
 }

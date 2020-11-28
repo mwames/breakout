@@ -34,6 +34,26 @@ namespace Breakout
             IsMouseVisible = true;
         }
 
+        public Ball GetBall() {
+            return new Ball(
+                new Vector2(
+                    graphics.PreferredBackBufferWidth / 2,
+                    graphics.PreferredBackBufferHeight / 2
+                ),
+                new Vector2(200f, 200f)
+            );
+        }
+
+        public Paddle GetPaddle() {
+            return new Paddle(
+                new Vector2(
+                    graphics.PreferredBackBufferWidth / 2 - 64,
+                    graphics.PreferredBackBufferHeight - 92
+                ),
+                460
+            );
+        }
+
         protected override void Initialize()
         {
             Store.scenes = new SceneManager();
@@ -41,27 +61,15 @@ namespace Breakout
             Store.soundEffects = new SoundEffectManager();
             Store.songs = new SongManager();
             Store.modes = new ModeManager();
+            Store.lives = 3;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
             graphics.PreferredBackBufferHeight = GameWindow.HEIGHT;
             graphics.ApplyChanges();
 
-            ball = new Ball(
-                new Vector2(
-                    graphics.PreferredBackBufferWidth / 2,
-                    graphics.PreferredBackBufferHeight / 2
-                ),
-                new Vector2(200f, 200f)
-            );
-
-            paddle = new Paddle(
-                new Vector2(
-                    graphics.PreferredBackBufferWidth / 2 - 64,
-                    graphics.PreferredBackBufferHeight - 92
-                ),
-                460
-            );
+            ball = GetBall();
+            paddle = GetPaddle();
 
             // Set up Scenes
             Store.scenes.Add(SceneName.Menu, new MainMenuScene());
@@ -69,6 +77,7 @@ namespace Breakout
             Store.scenes.Add(SceneName.GameOver, new GameOverScene());
             Store.scenes.Add(SceneName.Pause, new PauseScene());
             Store.scenes.Add(SceneName.Editor, new EditorScene());
+            Store.scenes.Add(SceneName.Death, new DeathScene());
             Store.scenes.ChangeScene((SceneName)envScene);
 
             base.Initialize();

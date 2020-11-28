@@ -92,11 +92,12 @@ namespace Breakout
 
             if (ball.Bottom >= GameWindow.HEIGHT)
             {
-                ball.heading = ball.FlipX(ball.heading);
-                ball.position.Y = GameWindow.HEIGHT - ball.radius * 2;
-                paddle.health--;
+                this.ball = new Ball(new Vector2(GameWindow.WIDTH / 2, GameWindow.HEIGHT / 2), new Vector2(200f, 200f));
+                this.paddle = new Paddle(new Vector2(GameWindow.WIDTH / 2 - 64, GameWindow.HEIGHT - 92), 460);
+                Store.lives -= 1;
+                Store.scenes.ChangeScene(SceneName.Death);
 
-                if (paddle.health <= 0)
+                if (Store.lives <= 0)
                     Store.scenes.ChangeScene(SceneName.GameOver);
             }
         }

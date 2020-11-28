@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
@@ -13,10 +12,18 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
-                string gameOverMessage = "So sad";
+                var gameOverMessage = "So sad";
+                var stringBox = spriteFont.MeasureString(gameOverMessage);
                 graphicsDevice.Clear(Color.DarkBlue);
-                spriteBatch.DrawString(spriteFont, gameOverMessage, new Vector2(GameWindow.WIDTH / 3 , GameWindow.HEIGHT /2), Color.DarkGoldenrod);
-                
+                spriteBatch.DrawString(
+                    spriteFont,
+                    gameOverMessage,
+                    new Vector2(
+                        GameWindow.WIDTH / 2 - stringBox.X / 2,
+                        GameWindow.HEIGHT / 2 - stringBox.X / 2 - 20
+                    ),
+                    Color.DarkGoldenrod
+                );
         }
     }
 }

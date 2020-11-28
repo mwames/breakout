@@ -96,7 +96,7 @@ namespace Breakout
                 var top = new Vector2((int)Center.X, (int)Top);
                 Dot.Draw(spriteBatch, top, texture);
 
-                // Right locator dot
+                // Bottom locator dot
                 var bottom = new Vector2((int)Center.X, (int)Bottom);
                 Dot.Draw(spriteBatch, bottom, texture);
             }
@@ -106,7 +106,7 @@ namespace Breakout
         {
             Random random = new Random();
             var variance = 0; // random.Next(-9, 10);
-            velocity += 10;
+            velocity += 5;
 
             if (sideOfImpact == Side.Top && speed.Y < 0)
             {
