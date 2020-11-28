@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -44,7 +43,6 @@ namespace Breakout
             if (Collision.DidCollide(ball, paddle))
             {
                 var sides = Collision.SideHit(ball, paddle);
-                System.Console.WriteLine(sides.ToString());
                 ball.OnCollide(sides["ball"], paddle);
                 score++;
                 Store.soundEffects.Get(SoundEffectName.BallSound).Play();
@@ -61,7 +59,6 @@ namespace Breakout
                 if (Collision.DidCollide(ball, block))
                 {
                     var sides = Collision.SideHit(ball, block);
-                    System.Console.WriteLine(sides.ToString());
                     block.OnCollide(sides["box"]);
                     score += 5;
                     Store.soundEffects.Get(SoundEffectName.BallSound).Play();
