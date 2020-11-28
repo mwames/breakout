@@ -31,31 +31,6 @@ namespace Breakout
             LoadLevel();
         }
 
-        public Side Opposite(Side side)
-        {
-            switch (side)
-            {
-                case Side.Top:
-                    return Side.Bottom;
-                case Side.TopRight:
-                    return Side.BottomLeft;
-                case Side.Right:
-                    return Side.Left;
-                case Side.BottomRight:
-                    return Side.TopLeft;
-                case Side.Bottom:
-                    return Side.Top;
-                case Side.BottomLeft:
-                    return Side.TopRight;
-                case Side.Left:
-                    return Side.Right;
-                case Side.TopLeft:
-                    return Side.BottomRight;
-                default:
-                    return Side.Top;
-            }
-        }
-
         public void Update(InputState input, GameTime gameTime)
         {
             if (input.WasPressed(Buttons.Start) || input.WasPressed(Keys.Space))
@@ -68,10 +43,11 @@ namespace Breakout
 
             if (Collision.DidCollide(ball, paddle))
             {
-                var side = paddle.CollidedOn(ball.Center);
-                if (side == Side.Top)
+                var sides = Collision.SideHit(ball, paddle);
+                System.Console.WriteLine(sides.ToString());
+                if (sides["box"] == Side.Top)
                 {
-                    ball.OnCollide(Side.Bottom);
+                    ball.OnCollide(sides["ball"]);
                     ball.position.Y = paddle.Top - ball.radius * 2;
                     score++;
                     Store.soundEffects.Get(SoundEffectName.BallSound).Play();
@@ -83,17 +59,17 @@ namespace Breakout
                     }
                 }
 
-                else if (side == Side.Left)
+                else if (sides["box"] == Side.Left)
                 {
-                    ball.OnCollide(Side.Right);
+                    ball.OnCollide(sides["ball"]);
                     ball.position.X = paddle.Left - ball.radius * 2;
                     score++;
                 }
 
-                else if (side == Side.Right)
+                else if (sides["box"] == Side.Right)
                 {
-                    ball.OnCollide(Side.Left);
-                    ball.position.X = paddle.Right;
+                    ball.OnCollide(sides["ball"]);
+                    ball.position.X = paddle.Right + ball.radius * 2;
                     score++;
                 }
             }
@@ -102,12 +78,12 @@ namespace Breakout
             {
                 if (Collision.DidCollide(ball, block))
                 {
-                    var side = block.CollidedOn(ball.Center);
-                    var oppositeSide = Opposite(side);
-                    block.OnCollide(side);
+                    var sides = Collision.SideHit(ball, block);
+                    System.Console.WriteLine(sides.ToString());
+                    block.OnCollide(sides["box"]);
                     score += 5;
                     Store.soundEffects.Get(SoundEffectName.BallSound).Play();
-                    ball.OnCollide(oppositeSide);
+                    ball.OnCollide(sides["ball"]);
                 }
             }
 

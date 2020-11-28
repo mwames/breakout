@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -89,70 +90,6 @@ namespace Breakout
                 // Right locator dot
                 var bottom = new Vector2((int)Center.X, (int)Bottom);
                 Dot.Draw(spriteBatch, bottom, texture);
-            }
-        }
-
-        public Side CollidedOn(Vector2 point)
-        {
-            if (point.Y < Top)
-            {
-                if (point.X >= Left && point.X <= Right)
-                {
-                    return Side.Top;
-                }
-                else if (point.X < Left && point.Y < Top)
-                {
-                    return Side.TopLeft;
-                }
-                else
-                {
-                    return Side.TopRight;
-                }
-            }
-            else if (point.Y > Bottom)
-            {
-                if (point.X >= Left && point.X <= Right)
-                {
-                    return Side.Bottom;
-                }
-                else if (point.X < Left && point.Y > Bottom)
-                {
-                    return Side.BottomLeft;
-                }
-                else
-                {
-                    return Side.BottomRight;
-                }
-            }
-            else if (point.X < Left)
-            {
-                if (point.Y >= Top && point.Y <= Bottom)
-                {
-                    return Side.Left;
-                }
-                else if (point.Y < Top)
-                {
-                    return Side.TopLeft;
-                }
-                else
-                {
-                    return Side.BottomLeft;
-                }
-            }
-            else
-            {
-                if (point.Y >= Top && point.Y <= Bottom)
-                {
-                    return Side.Right;
-                }
-                else if (point.Y < Top)
-                {
-                    return Side.TopRight;
-                }
-                else
-                {
-                    return Side.BottomRight;
-                }
             }
         }
 

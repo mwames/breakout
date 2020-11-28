@@ -105,44 +105,24 @@ namespace Breakout
         public void OnCollide(Side sideOfImpact)
         {
             Random random = new Random();
-            var variance = random.Next(-9, 10);
+            var variance = 0; // random.Next(-9, 10);
             velocity += 10;
 
-            if (sideOfImpact == Side.Top)
+            if (sideOfImpact == Side.Top && speed.Y < 0)
             {
                 this.heading = FlipX(this.heading + variance);
             }
-            else if (sideOfImpact == Side.TopRight)
-            {
-                this.heading = FlipX(this.heading);
-                this.heading = FlipY(this.heading);
-            }
-            else if (sideOfImpact == Side.Right)
+            else if (sideOfImpact == Side.Right && speed.X > 0)
             {
                 this.heading = FlipY(this.heading + variance);
             }
-            else if (sideOfImpact == Side.BottomRight)
-            {
-                this.heading = FlipX(this.heading);
-                this.heading = FlipY(this.heading);
-            }
-            else if (sideOfImpact == Side.Bottom)
+            else if (sideOfImpact == Side.Bottom && speed.Y > 0)
             {
                 this.heading = FlipX(this.heading + variance);
             }
-            else if (sideOfImpact == Side.BottomLeft)
-            {
-                this.heading = FlipX(this.heading);
-                this.heading = FlipY(this.heading);
-            }
-            else if (sideOfImpact == Side.Left)
+            else if (sideOfImpact == Side.Left && speed.X < 0)
             {
                 this.heading = FlipY(this.heading + variance);
-            }
-            else
-            {
-                this.heading = FlipX(this.heading);
-                this.heading = FlipY(this.heading);
             }
         }
     }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Breakout
 {
@@ -6,34 +8,19 @@ namespace Breakout
     {
         public static bool DidCollide(Ball ball, IRectangle paddle)
         {
-            var cx = ball.Center.X;
-            var cy = ball.Center.Y;
-            var rl = paddle.Left;
-            var rr = paddle.Right;
-            var rt = paddle.Top;
-            var rb = paddle.Bottom;
+            float testX = ball.Center.X;
+            float testY = ball.Center.Y;
 
-            // temporary variables to set edges for testing
-            float testX = cx;
-            float testY = cy;
+            if (ball.Center.X < paddle.Left) testX = paddle.Left;
+            else if (ball.Center.X > paddle.Right) testX = paddle.Right;
+            if (ball.Center.Y < paddle.Top) testY = paddle.Top;
+            else if (ball.Center.Y > paddle.Bottom) testY = paddle.Bottom;
 
-            // which edge is closest?
-            if (cx < rl) testX = rl;      // test left edge
-            else if (cx > rr) testX = rr;   // right edge
-            if (cy < rt) testY = rt;      // top edge
-            else if (cy > rb) testY = rb;   // bottom edge
-
-            // get distance from closest edges
-            double distX = cx - testX;
-            double distY = cy - testY;
+            double distX = ball.Center.X - testX;
+            double distY = ball.Center.Y - testY;
             double distance = Math.Sqrt((distX * distX) + (distY * distY));
 
-            // if the distance is less than the radius, collision!
-            if (distance <= ball.radius)
-            {
-                return true;
-            }
-            return false;
+            return distance <= ball.radius;
         }
 
         public static bool DidCollide(Ball ball1, Ball ball2)
@@ -44,6 +31,123 @@ namespace Breakout
         public static bool DidCollide(Paddle paddle1, Paddle paddle2)
         {
             return false;
+        }
+
+        private static Dictionary<string, Side> MakeCollisionDict(Side ballSide, Side boxSide) {
+            return new Dictionary<string, Side>() {
+                ["ball"] = ballSide,
+                ["box"] = boxSide
+            };
+        }
+        private static Dictionary<string, Side> ResolveTop(Vector2 point, IRectangle box) {
+            if (point.X >= box.Left && point.X <= box.Right) {
+                return MakeCollisionDict(Side.Bottom, Side.Top);
+            }
+            if (point.X < box.Left) {
+                var rPoint = new Vector2(box.Left, box.Top);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Bottom, Side.Top)
+                    : MakeCollisionDict(Side.Right, Side.Left);
+            } else {
+                var rPoint = new Vector2(box.Right, box.Top);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                 return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Bottom, Side.Top)
+                    : MakeCollisionDict(Side.Left, Side.Right);
+            }
+        }
+        private static Dictionary<string, Side> ResolveBottom(Vector2 point, IRectangle box) {
+            if (point.X >= box.Left && point.X <= box.Right)
+            {
+                return MakeCollisionDict(Side.Top, Side.Bottom);
+            }
+            if (point.X < box.Left)
+            {
+                var rPoint = new Vector2(box.Left, box.Bottom);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Top, Side.Bottom)
+                    : MakeCollisionDict(Side.Right, Side.Left);
+            }
+            else
+            {
+                var rPoint = new Vector2(box.Right, box.Bottom);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Top, Side.Bottom)
+                    : MakeCollisionDict(Side.Left, Side.Right);
+            }
+        }
+        private static Dictionary<string, Side> ResolveLeft(Vector2 point, IRectangle box) {
+            if (point.Y >= box.Top && point.Y <= box.Bottom)
+            {
+                return MakeCollisionDict(Side.Right, Side.Left);
+            }
+            if (point.X < box.Top)
+            {
+                var rPoint = new Vector2(box.Left, box.Top);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Bottom, Side.Top)
+                    : MakeCollisionDict(Side.Right, Side.Left);
+            }
+            else
+            {
+                var rPoint = new Vector2(box.Left, box.Bottom);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Top, Side.Bottom)
+                    : MakeCollisionDict(Side.Right, Side.Left);
+            }
+        }
+        private static Dictionary<string, Side> ResolveRight(Vector2 point, IRectangle box) {
+            if (point.Y >= box.Top && point.Y <= box.Bottom)
+            {
+                return MakeCollisionDict(Side.Left, Side.Right);
+            }
+            if (point.X < box.Top)
+            {
+                var rPoint = new Vector2(box.Right, box.Top);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Bottom, Side.Top)
+                    : MakeCollisionDict(Side.Left, Side.Right);
+            }
+            else
+            {
+                var rPoint = new Vector2(box.Right, box.Bottom);
+                var xDiff = Math.Abs(rPoint.X - point.X);
+                var yDiff = Math.Abs(rPoint.Y - point.Y);
+                return yDiff > xDiff
+                    ? MakeCollisionDict(Side.Top, Side.Bottom)
+                    : MakeCollisionDict(Side.Left, Side.Right);
+            }
+        }
+
+        public static Dictionary<string, Side> SideHit(Ball ball, IRectangle box) {
+            var point = ball.Center;
+            if (point.Y <= box.Top) {
+                return ResolveTop(point, box);
+            }
+            if (point.Y >= box.Bottom) {
+                return ResolveBottom(point, box);
+            }
+            if (point.X <= box.Left) {
+                return ResolveLeft(point, box);
+            }
+            if (point.X >= box.Right) {
+                return ResolveRight(point, box);
+            }
+
+            return MakeCollisionDict(Side.Bottom, Side.Top);
         }
     }
 }
