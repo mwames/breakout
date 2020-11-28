@@ -15,14 +15,14 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
-                var deathMessage = "You died";
+                var deathMessage = "Your efforts were valiant, \n however not enough.";
                 var deathMessageSize = spriteFont.MeasureString(deathMessage);
 
-                var livesMessage = $"x{Store.lives}";
+                var livesMessage = $"{Store.lives} left";
                 var livesMessageSize = spriteFont.MeasureString(livesMessage);
 
                 var texture = Store.textures.Get(TextureName.Paddle);
-                var totalWidth = texture.Width + livesMessageSize.X;
+                var totalWidth = texture.Width/2 + livesMessageSize.X;
 
                 graphicsDevice.Clear(Color.DarkBlue);
                 spriteBatch.DrawString(
@@ -30,7 +30,7 @@ namespace Breakout
                     deathMessage,
                     new Vector2(
                         GameWindow.WIDTH / 2 - deathMessageSize.X / 2 ,
-                        GameWindow.HEIGHT / 2 - deathMessageSize.Y / 2 - 60
+                        GameWindow.HEIGHT / 2 - 30 - deathMessageSize.Y / 2 - 60
                     ),
                     Color.DarkGoldenrod
                 );
@@ -40,7 +40,7 @@ namespace Breakout
                         texture,
                         new Vector2(
                             GameWindow.WIDTH / 2 - totalWidth / 2,
-                            GameWindow.HEIGHT / 2 - texture.Height / 2 - 20
+                            GameWindow.HEIGHT / 2 - texture.Height / 2 + 20
                     ),
                         new Rectangle(0, 0, texture.Width, texture.Height),
                         Color.White
@@ -51,8 +51,8 @@ namespace Breakout
                     spriteFont,
                     livesMessage,
                     new Vector2(
-                        GameWindow.WIDTH / 2 - totalWidth / 2 + texture.Width + 10,
-                        GameWindow.HEIGHT / 2 - livesMessageSize.Y / 2 - 20
+                        GameWindow.WIDTH / 2 -30 ,
+                        GameWindow.HEIGHT / 2 +45
                     ),
                     Color.DarkGoldenrod
                 );

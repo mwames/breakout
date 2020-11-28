@@ -142,10 +142,10 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
-            for (int i = 0; i < paddle.health; i++)
-            {
-                spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, GameWindow.HEIGHT - 64), Color.White);
-            }
+            // for (int i = 0; i < paddle.health; i++)    if we still want to display, could be paddles instead of hearts
+            // {
+            //     spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, GameWindow.HEIGHT - 64), Color.White);
+            // }
 
             ball.Draw(spriteBatch, spriteFont);
             paddle.Draw(spriteBatch, spriteFont);
