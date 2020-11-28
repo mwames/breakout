@@ -8,6 +8,5 @@ namespace Breakout
     {
         void Update(GameTime gameTime, InputState inputState);
         void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont);
-        void OnCollide(Side sideOfImpact);
     }
 }

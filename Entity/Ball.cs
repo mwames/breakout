@@ -102,7 +102,7 @@ namespace Breakout
             }
         }
 
-        public void OnCollide(Side sideOfImpact)
+        public void OnCollide(Side sideOfImpact, IRectangle box)
         {
             Random random = new Random();
             var variance = 0; // random.Next(-9, 10);
@@ -110,18 +110,22 @@ namespace Breakout
 
             if (sideOfImpact == Side.Top && speed.Y < 0)
             {
+                position.Y = box.Bottom;
                 this.heading = FlipX(this.heading + variance);
             }
             else if (sideOfImpact == Side.Right && speed.X > 0)
             {
+                position.X = box.Left - radius * 2;
                 this.heading = FlipY(this.heading + variance);
             }
             else if (sideOfImpact == Side.Bottom && speed.Y > 0)
             {
+                position.Y = box.Top - radius * 2;
                 this.heading = FlipX(this.heading + variance);
             }
             else if (sideOfImpact == Side.Left && speed.X < 0)
             {
+                position.X = box.Right;
                 this.heading = FlipY(this.heading + variance);
             }
         }

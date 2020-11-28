@@ -45,32 +45,14 @@ namespace Breakout
             {
                 var sides = Collision.SideHit(ball, paddle);
                 System.Console.WriteLine(sides.ToString());
-                if (sides["box"] == Side.Top)
-                {
-                    ball.OnCollide(sides["ball"]);
-                    ball.position.Y = paddle.Top - ball.radius * 2;
-                    score++;
-                    Store.soundEffects.Get(SoundEffectName.BallSound).Play();
+                ball.OnCollide(sides["ball"], paddle);
+                score++;
+                Store.soundEffects.Get(SoundEffectName.BallSound).Play();
 
-                    if (blocks.Count == 0)
-                    {
-                        currentLevel += 1;
-                        LoadLevel();
-                    }
-                }
-
-                else if (sides["box"] == Side.Left)
+                if (blocks.Count == 0)
                 {
-                    ball.OnCollide(sides["ball"]);
-                    ball.position.X = paddle.Left - ball.radius * 2;
-                    score++;
-                }
-
-                else if (sides["box"] == Side.Right)
-                {
-                    ball.OnCollide(sides["ball"]);
-                    ball.position.X = paddle.Right + ball.radius * 2;
-                    score++;
+                    currentLevel += 1;
+                    LoadLevel();
                 }
             }
 
@@ -83,7 +65,7 @@ namespace Breakout
                     block.OnCollide(sides["box"]);
                     score += 5;
                     Store.soundEffects.Get(SoundEffectName.BallSound).Play();
-                    ball.OnCollide(sides["ball"]);
+                    ball.OnCollide(sides["ball"], block);
                 }
             }
 
@@ -92,28 +74,28 @@ namespace Breakout
 
             if (ball.Top <= 0)
             {
-                ball.OnCollide(Side.Top);
+                ball.heading = ball.FlipX(ball.heading);
                 ball.position.Y = 0;
                 Store.soundEffects.Get(SoundEffectName.BallSound).Play();
             }
 
             if (ball.Left <= 0)
             {
-                ball.OnCollide(Side.Left);
+                ball.heading = ball.FlipY(ball.heading);
                 ball.position.X = 0;
                 Store.soundEffects.Get(SoundEffectName.BallSound).Play();
             }
 
             if (ball.Right >= GameWindow.WIDTH)
             {
-                ball.OnCollide(Side.Right);
+                ball.heading = ball.FlipY(ball.heading);
                 ball.position.X = GameWindow.WIDTH - ball.radius * 2;
                 Store.soundEffects.Get(SoundEffectName.BallSound).Play();
             }
 
             if (ball.Bottom >= GameWindow.HEIGHT)
             {
-                ball.OnCollide(Side.Bottom);
+                ball.heading = ball.FlipX(ball.heading);
                 ball.position.Y = GameWindow.HEIGHT - ball.radius * 2;
                 paddle.health--;
 
