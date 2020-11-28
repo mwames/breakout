@@ -6,7 +6,7 @@ namespace Breakout
 {
     public class GameOverScene : IScene
     {
-        public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        public void Update(InputState input, GameTime gameTime)
         {
             Store.songs.Play(SongName.GameOver);
         }

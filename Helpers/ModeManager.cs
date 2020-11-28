@@ -1,18 +1,44 @@
+using System.Collections.Generic;
+
 namespace Breakout
 {
     public enum Mode
     {
-        None,
         Normal,
         Debug,
         Editor
     }
 
-    public static class ModeManager
+    public enum DebugOptions
     {
-        public static Mode currentMode = Mode.Normal;
+        None,
+        ShowLocators,
+        FrameAdvance,
+    }
 
-        public static void Toggle(Mode mode)
+    public class ModeManager
+    {
+        public Mode currentMode = Mode.Normal;
+        public HashSet<DebugOptions> enabledOptions = new HashSet<DebugOptions>();
+
+        public void ToggleDebugOption(DebugOptions option)
+        {
+            if (enabledOptions.Contains(option))
+            {
+                enabledOptions.Remove(option);
+            }
+            else
+            {
+                enabledOptions.Add(option);
+                currentMode = Mode.Debug;
+            }
+        }
+
+        public bool Active(DebugOptions option) {
+            return currentMode == Mode.Debug && enabledOptions.Contains(option);
+        }
+
+        public void Toggle(Mode mode)
         {
             if (mode == Mode.Normal || currentMode == mode)
                 currentMode = Mode.Normal;

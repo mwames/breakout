@@ -5,7 +5,6 @@ namespace Breakout
 {
     public enum SceneName
     {
-        None,
         Menu,
         Game,
         GameOver,

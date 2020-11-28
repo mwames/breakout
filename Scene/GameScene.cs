@@ -23,33 +23,53 @@ namespace Breakout
             {"blue", TextureName.BlueBlock}
         };
 
-        public GameScene(Paddle paddle,Ball ball)
+        public GameScene(Paddle paddle, Ball ball)
         {
             this.paddle = paddle;
             this.ball = ball;
             this.blocks = new List<Block>();
             LoadLevel();
-
         }
 
-        public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        public Side Opposite(Side side)
         {
-            if ((!previousGamePadState.IsButtonDown(Buttons.Start) && gamePadState.IsButtonDown(Buttons.Start)) || (!previousKeyboardState.IsKeyDown(Keys.Space) && keyboardState.IsKeyDown(Keys.Space)))
+            switch (side)
+            {
+                case Side.Top:
+                    return Side.Bottom;
+                case Side.TopRight:
+                    return Side.BottomLeft;
+                case Side.Right:
+                    return Side.Left;
+                case Side.BottomRight:
+                    return Side.TopLeft;
+                case Side.Bottom:
+                    return Side.Top;
+                case Side.BottomLeft:
+                    return Side.TopRight;
+                case Side.Left:
+                    return Side.Right;
+                case Side.TopLeft:
+                    return Side.BottomRight;
+                default:
+                    return Side.Top;
+            }
+        }
+
+        public void Update(InputState input, GameTime gameTime)
+        {
+            if (input.WasPressed(Buttons.Start) || input.WasPressed(Keys.Space))
             {
                 Store.scenes.ChangeScene(SceneName.Pause);
             }
 
-            if (gamePadState.IsConnected)
-                paddle.Update(gameTime, gamePadState);
-            else
-                paddle.Update(gameTime, keyboardState);
-
-            ball.Update(gameTime, gamePadState);
+            paddle.Update(gameTime, input);
+            ball.Update(gameTime, input);
 
             if (Collision.DidCollide(ball, paddle))
             {
-                // Bottom was hit
-                if (ball.Bottom >= paddle.Top && ball.Top < paddle.Top)
+                var side = paddle.CollidedOn(ball.Center);
+                if (side == Side.Top)
                 {
                     ball.OnCollide(Side.Bottom);
                     ball.position.Y = paddle.Top - ball.radius * 2;
@@ -63,18 +83,16 @@ namespace Breakout
                     }
                 }
 
-                // Left was hit
-                if (ball.Right >= paddle.Left && ball.Left < paddle.Left)
+                else if (side == Side.Left)
                 {
-                    ball.OnCollide(Side.Left);
+                    ball.OnCollide(Side.Right);
                     ball.position.X = paddle.Left - ball.radius * 2;
                     score++;
                 }
 
-                // Right was hit
-                if (ball.Left <= paddle.Right && ball.Right > paddle.Right)
+                else if (side == Side.Right)
                 {
-                    ball.OnCollide(Side.Right);
+                    ball.OnCollide(Side.Left);
                     ball.position.X = paddle.Right;
                     score++;
                 }
@@ -84,10 +102,12 @@ namespace Breakout
             {
                 if (Collision.DidCollide(ball, block))
                 {
-                    block.OnCollide(Side.Bottom);
+                    var side = block.CollidedOn(ball.Center);
+                    var oppositeSide = Opposite(side);
+                    block.OnCollide(side);
                     score += 5;
                     Store.soundEffects.Get(SoundEffectName.BallSound).Play();
-                    ball.OnCollide(Side.Top);
+                    ball.OnCollide(oppositeSide);
                 }
             }
 
@@ -130,38 +150,38 @@ namespace Breakout
         {
             int totalLevels = System.IO.Directory.GetFiles($@"./Levels/").Count();
             ball.velocity = 250;
-           if (currentLevel > totalLevels)
-           {
-             var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
-             foreach (var line in lines)
-             {
-                 if (line != "")
-                 {
-                     var parts = line.Split(",");
-                     blocks.Add(new Block(
-                         Int32.Parse(parts[0]),
-                         Int32.Parse(parts[1]),
-                        textureNameMap[parts[2]]
-                         )
-                    );
+            if (currentLevel < totalLevels)
+            {
+                var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
+                foreach (var line in lines)
+                {
+                    if (line != "")
+                    {
+                        var parts = line.Split(",");
+                        blocks.Add(new Block(
+                            Int32.Parse(parts[0]),
+                            Int32.Parse(parts[1]),
+                           textureNameMap[parts[2]]
+                            )
+                       );
+                    }
                 }
             }
-           }
-           
-           else
-           {
-            Random random = new Random();
-            var count = random.Next(12, 25);
-
-            for (var i = 0; i < count; i += 1)
+            else
             {
-                var col = random.Next(0, 5);
-                var row = random.Next(2, 10);
-                TextureName color = (TextureName)random.Next(6, 10);
+                // TODO: We need to make sure blocks don't stack
+                Random random = new Random();
+                var count = random.Next(12, 25);
 
-                blocks.Add(new Block(col, row, color));
+                for (var i = 0; i < count; i += 1)
+                {
+                    var col = random.Next(0, 5);
+                    var row = random.Next(2, 10);
+                    TextureName color = (TextureName)random.Next(6, 10);
+
+                    blocks.Add(new Block(col, row, color));
+                }
             }
-           }
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
@@ -177,10 +197,10 @@ namespace Breakout
             {
                 block.Draw(spriteBatch, spriteFont);
             }
-            spriteBatch.DrawString(spriteFont, "Points: " + score.ToString(), new Vector2(GameWindow.WIDTH-190, GameWindow.HEIGHT-50), Color.Black);
-            if(score >=9999)
+            spriteBatch.DrawString(spriteFont, "Points: " + score.ToString(), new Vector2(GameWindow.WIDTH - 190, GameWindow.HEIGHT - 50), Color.Black);
+            if (score >= 9999)
             {
-                  spriteBatch.DrawString(spriteFont,"You are the truest Breakout", new Vector2(50, GameWindow.HEIGHT /2), Color.Black);
+                spriteBatch.DrawString(spriteFont, "You are the truest Breakout", new Vector2(50, GameWindow.HEIGHT / 2), Color.Black);
             }
         }
 

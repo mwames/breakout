@@ -37,31 +37,21 @@ namespace Breakout
             return position.X + texture.Width < GameWindow.WIDTH;
         }
 
-        public void Update(GameTime gameTime, KeyboardState kState)
+        public void Update(GameTime gameTime, InputState input)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (kState.IsKeyDown(Keys.Left) && isInBoundLeft())
-            {
-                position.X -= speed * dt;
-            }
-            if (kState.IsKeyDown(Keys.Right) && isInBoundRight())
-            {
-                position.X += speed * dt;
-            }
-        }
+            var leftPressed = input.IsPressed(Buttons.LeftThumbstickLeft)
+                || input.IsPressed(Buttons.X)
+                || input.IsPressed(Buttons.DPadLeft)
+                || input.IsPressed(Buttons.LeftShoulder)
+                || input.IsPressed(Keys.Left);
 
-        public void Update(GameTime gameTime, GamePadState gState)
-        {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            var leftPressed = gState.IsButtonDown(Buttons.LeftThumbstickLeft)
-                || gState.IsButtonDown(Buttons.X)
-                || gState.IsButtonDown(Buttons.DPadLeft);
-
-            var rightPressed = gState.IsButtonDown(Buttons.LeftThumbstickRight)
-                || gState.IsButtonDown(Buttons.B)
-                || gState.IsButtonDown(Buttons.DPadRight);
+            var rightPressed = input.IsPressed(Buttons.LeftThumbstickRight)
+                || input.IsPressed(Buttons.B)
+                || input.IsPressed(Buttons.DPadRight)
+                || input.IsPressed(Buttons.RightShoulder)
+                || input.IsPressed(Keys.Right);
 
             if (leftPressed && isInBoundLeft())
             {
@@ -73,11 +63,13 @@ namespace Breakout
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, SpriteFont spritefont) {
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spritefont)
+        {
             // Draws the ball
             spriteBatch.Draw(texture, new Vector2(position.X, position.Y), Color.White);
 
-            if (ModeManager.currentMode == Mode.Debug) {
+            if (Store.modes.Active(DebugOptions.ShowLocators))
+            {
                 // Center locater dot
                 var center = new Vector2((int)Center.X, (int)Center.Y);
                 Dot.Draw(spriteBatch, center, texture);
@@ -100,7 +92,72 @@ namespace Breakout
             }
         }
 
-        public void OnCollide(Side sideOfImpact) {
+        public Side CollidedOn(Vector2 point)
+        {
+            if (point.Y < Top)
+            {
+                if (point.X >= Left && point.X <= Right)
+                {
+                    return Side.Top;
+                }
+                else if (point.X < Left && point.Y < Top)
+                {
+                    return Side.TopLeft;
+                }
+                else
+                {
+                    return Side.TopRight;
+                }
+            }
+            else if (point.Y > Bottom)
+            {
+                if (point.X >= Left && point.X <= Right)
+                {
+                    return Side.Bottom;
+                }
+                else if (point.X < Left && point.Y > Bottom)
+                {
+                    return Side.BottomLeft;
+                }
+                else
+                {
+                    return Side.BottomRight;
+                }
+            }
+            else if (point.X < Left)
+            {
+                if (point.Y >= Top && point.Y <= Bottom)
+                {
+                    return Side.Left;
+                }
+                else if (point.Y < Top)
+                {
+                    return Side.TopLeft;
+                }
+                else
+                {
+                    return Side.BottomLeft;
+                }
+            }
+            else
+            {
+                if (point.Y >= Top && point.Y <= Bottom)
+                {
+                    return Side.Right;
+                }
+                else if (point.Y < Top)
+                {
+                    return Side.TopRight;
+                }
+                else
+                {
+                    return Side.BottomRight;
+                }
+            }
+        }
+
+        public void OnCollide(Side sideOfImpact)
+        {
 
         }
     }

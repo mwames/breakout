@@ -21,9 +21,9 @@ namespace Breakout
                 );
         }
 
-        public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        public void Update(InputState input, GameTime gameTime)
         {
-            if ((!previousGamePadState.IsButtonDown(Buttons.Start) && gamePadState.IsButtonDown(Buttons.Start)) || (!previousKeyboardState.IsKeyDown(Keys.Space) && keyboardState.IsKeyDown(Keys.Space))) {
+            if (input.WasPressed(Buttons.Start) || input.WasPressed(Keys.Space)) {
                 Store.scenes.ChangeScene(SceneName.Game);
             }
         }

@@ -16,10 +16,6 @@ namespace Breakout
         public string[] lines = System.IO.File.ReadAllLines(@"./Levels/palette.txt");
         public int score;
         public bool saved = false;
-        public MouseState current;
-        public MouseState previous;
-        public KeyboardState kCurrent;
-        public KeyboardState kPrevious;
         public int[,] playfield = new int[COLUMNS, ROWS];
         public Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
         {
@@ -52,10 +48,6 @@ namespace Breakout
             }
         }
 
-        public bool WasClicked(MouseState current, MouseState previous) {
-            return current.LeftButton == ButtonState.Pressed && previous.LeftButton != ButtonState.Pressed;
-        }
-
         public void SaveLevel() {
             var levelNumber = Directory.GetFiles("./Levels").Length;
             List<String> lines = new List<String>();
@@ -73,14 +65,12 @@ namespace Breakout
             System.IO.File.WriteAllLines($@"./Levels/level{levelNumber}.txt", lines);
         }
 
-        public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        public void Update(InputState input, GameTime gameTime)
         {
-            previous = current;
-            current = Mouse.GetState();
             foreach(var block in blocks)
             {
-                if (WasClicked(current, previous)) {
-                    if (block.Clicked(new Vector2(current.Position.X, current.Position.Y))) {
+                if (input.Clicked) {
+                    if (block.Clicked(input.ClickedAt)) {
                         currentColor = block.textureName;
                         saved = false;
                     }
@@ -90,16 +80,14 @@ namespace Breakout
             for(var column = 0; column < COLUMNS; column += 1) {
                 for(var row = 0; row < ROWS; row += 1) {
                     var block = new Block(column, row + 3, TextureName.RedBlock);
-                    if(current.LeftButton == ButtonState.Pressed && block.Clicked(new Vector2(current.Position.X, current.Position.Y)))
+                    if (input.Clicked && block.Clicked(input.ClickedAt))
                     {
                         playfield[column, row] = (int)currentColor;
                     }
                 }
             }
 
-            kPrevious = kCurrent;
-            kCurrent = Keyboard.GetState();
-            if(kCurrent.IsKeyDown(Keys.Enter) && !kPrevious.IsKeyDown(Keys.Enter)) {
+            if(input.WasPressed(Keys.Enter)) {
                 SaveLevel();
                 saved = true;
             }
@@ -139,8 +127,6 @@ namespace Breakout
             }
 
             // Draw UI components
-            spriteBatch.DrawString(spriteFont, "X: " + current.Position.X, new Vector2(3, 3), Color.Black);
-            spriteBatch.DrawString(spriteFont, "Y: " + current.Position.Y, new Vector2(3, 30), Color.Black);
             spriteBatch.DrawString(spriteFont, "Selected: " + currentColor, new Vector2(7 * 96, 3), Color.Black);
             spriteBatch.DrawString(spriteFont, "Press enter to save level" , new Vector2(7 * 96, 120), Color.Black);
             if (saved)

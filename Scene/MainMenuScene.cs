@@ -9,10 +9,10 @@ namespace Breakout
         readonly int OFFSET = 50;
         readonly string MESSAGE = "Press enter to begin!";
         
-        public void Update(GamePadState gamePadState, GamePadState previousGamePadState, KeyboardState keyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        public void Update(InputState input, GameTime gameTime)
         {
 
-            if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.IsButtonDown(Buttons.Start))
+            if (input.WasPressed(Keys.Enter) || input.WasPressed(Buttons.Start))
             {
                 Store.scenes.ChangeScene(SceneName.Game);
             }

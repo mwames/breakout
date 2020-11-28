@@ -8,6 +8,10 @@ namespace Breakout
 {
     public class Breakout : Game
     {
+        public string env;
+        public int envScene;
+        public int envMode;
+
         public Ball ball;
         public Player player = new Player(PlayerIndex.One);
         public GraphicsDeviceManager graphics;
@@ -15,12 +19,6 @@ namespace Breakout
         public SpriteFont gameFont;
         public Paddle paddle;
         public bool isFinished = false;
-        
-        
-        public KeyboardState previousKeyboardState;
-        public KeyboardState keyboardState;
-        public GamePadState gamePadState;
-        public GamePadState previousGamePadState;
 
         public Breakout()
         {
@@ -38,11 +36,16 @@ namespace Breakout
 
         protected override void Initialize()
         {
+            Store.scenes = new SceneManager();
+            Store.textures = new TextureManager();
+            Store.soundEffects = new SoundEffectManager();
+            Store.songs = new SongManager();
+            Store.modes = new ModeManager();
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
             graphics.PreferredBackBufferHeight = GameWindow.HEIGHT;
             graphics.ApplyChanges();
-            Store.textures = new TextureManager();
 
             ball = new Ball(
                 new Vector2(
@@ -59,24 +62,14 @@ namespace Breakout
                 ),
                 460
             );
-           
+
             // Set up Scenes
-            Store.scenes = new SceneManager();
             Store.scenes.Add(SceneName.Menu, new MainMenuScene());
             Store.scenes.Add(SceneName.Game, new GameScene(paddle, ball));
             Store.scenes.Add(SceneName.GameOver, new GameOverScene());
             Store.scenes.Add(SceneName.Pause, new PauseScene());
             Store.scenes.Add(SceneName.Editor, new EditorScene());
-            if(isFinished == false)
-            {
-            Store.scenes.ChangeScene(SceneName.Editor);
-            }
-            else {
-                Store.scenes.ChangeScene(SceneName.Menu);
-            }
-
-            Store.soundEffects = new SoundEffectManager();
-            Store.songs = new SongManager();
+            Store.scenes.ChangeScene((SceneName)envScene);
 
             base.Initialize();
         }
@@ -97,49 +90,53 @@ namespace Breakout
             Store.songs.Add(SongName.GameOver, Content.Load<Song>("gameOver"));
             gameFont = Content.Load<SpriteFont>("gameFont");
         }
-
+        
         protected override void Update(GameTime gameTime)
         {
-            previousKeyboardState = keyboardState;
-            keyboardState = Keyboard.GetState();
-
-            previousGamePadState = gamePadState;
-            gamePadState = player.getInput();
-
-            if (gamePadState.IsButtonDown(Buttons.Back) || keyboardState.IsKeyDown(Keys.Escape))
+            var input = player.getInput();
+            if (input.WasPressed(Buttons.Back) || input.WasPressed(Keys.Escape))
                 Exit();
 
-            if (isFinished ==false)
+            if (!isFinished)
             {
-                if (keyboardState.IsKeyDown(Keys.F10) && !(previousKeyboardState.IsKeyDown(Keys.F10)))
-                ModeManager.Toggle(Mode.Debug);
-
-                if (keyboardState.IsKeyDown(Keys.F2) && !(previousKeyboardState.IsKeyDown(Keys.F2)))
+                // F1 toggles between game and editor
+                if (input.WasPressed(Keys.F1))
                 {
-                if (Store.scenes.sceneName == SceneName.Editor)
-                    Store.scenes.ChangeScene(SceneName.Game);
-                else
-                    Store.scenes.ChangeScene(SceneName.Editor);
+                    if (Store.scenes.sceneName == SceneName.Editor)
+                        Store.scenes.ChangeScene(SceneName.Game);
+                    else
+                        Store.scenes.ChangeScene(SceneName.Editor);
                 }
 
-                if (Store.scenes.sceneName == SceneName.Editor) {
-                graphics.PreferredBackBufferWidth = 1024;
-                graphics.ApplyChanges();
-                }
-                else
-                {
-                graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
-                graphics.ApplyChanges();
-                }
+                // F5 toggle debug mode
+                if (input.WasPressed(Keys.F5))
+                    Store.modes.Toggle(Mode.Debug);
+
+                //F9 toggle locator dot mode
+                if (input.WasPressed(Keys.F9))
+                    Store.modes.ToggleDebugOption(DebugOptions.ShowLocators);
+
+                // F10 toggle frame advance mode
+                if (input.WasPressed(Keys.F10))
+                    Store.modes.ToggleDebugOption(DebugOptions.FrameAdvance);
             }
 
-            Store.scenes.Scene.Update(
-                gamePadState,
-                previousGamePadState,
-                keyboardState,
-                previousKeyboardState,
-                gameTime
-                );
+                // F11 advances frames
+                if ((!Store.modes.Active(DebugOptions.FrameAdvance)) || (Store.modes.Active(DebugOptions.FrameAdvance) && input.WasPressed(Keys.F12)))
+                {
+                    Store.scenes.Scene.Update(input, gameTime);
+                }
+
+                if (Store.scenes.sceneName == SceneName.Editor)
+                {
+                    graphics.PreferredBackBufferWidth = 1024;
+                    graphics.ApplyChanges();
+                }
+                else
+                {
+                    graphics.PreferredBackBufferWidth = GameWindow.WIDTH;
+                    graphics.ApplyChanges();
+                }
 
             base.Update(gameTime);
         }
