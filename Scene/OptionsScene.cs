@@ -10,33 +10,47 @@ namespace Breakout
         public bool normal = true;
 
         public bool hard = false;
+        public bool back = false;
         
         public void Update(InputState input, GameTime gameTime)
         {
-            if ( easy == true && (input.WasPressed(Keys.Down) || input.WasPressed(Buttons.DPadDown)))
+            if ( easy == true && (input.WasPressed(Keys.Right) || input.WasPressed(Buttons.DPadRight)))
             {
                  easy  = false;
                  normal = true;
             }  
 
-            else if ( normal == true && (input.WasPressed(Keys.Down) || input.WasPressed(Buttons.DPadDown)))
+            else if ( normal == true && (input.WasPressed(Keys.Right) || input.WasPressed(Buttons.DPadRight)))
             {
                  normal = false;
                  hard= true;
             }
               
-            if (normal== true && (input.WasPressed(Keys.Up) || input.WasPressed(Buttons.DPadUp)))
+            if (normal== true && (input.WasPressed(Keys.Left) || input.WasPressed(Buttons.DPadLeft)))
             {
                normal = false;
                easy = true;
             }
 
-            if (hard == true && (input.WasPressed(Keys.Up) || input.WasPressed(Buttons.DPadUp)))
+            if (hard == true && (input.WasPressed(Keys.Left) || input.WasPressed(Buttons.DPadLeft)))
             {
                hard = false;
                normal = true;
             }
 
+            if ((input.WasPressed(Keys.Down) || input.WasPressed(Buttons.DPadDown)))
+            {
+                 back = true;
+            }  
+            if ((input.WasPressed(Keys.Up) || input.WasPressed(Buttons.DPadUp)))
+            {
+                 back = false;
+            }  
+
+            if (back == true && (input.WasPressed(Keys.Enter) || input.WasPressed(Buttons.Start)))
+            {
+                Store.scenes.ChangeScene(SceneName.Menu);
+            }
             
         }
 
@@ -61,21 +75,29 @@ namespace Breakout
 
             if (normal)
             {
-            spriteBatch.DrawString(spriteFont, "Normal", new Vector2(25, 300), Color.Yellow);
+            spriteBatch.DrawString(spriteFont, "Normal", new Vector2(125, 250), Color.Yellow);
             }
 
             else
             {
-                spriteBatch.DrawString(spriteFont, "Normal", new Vector2(25, 300), Color.White);
+                spriteBatch.DrawString(spriteFont, "Normal", new Vector2(125, 250), Color.White);
             }
 
             if (hard)
             {
-            spriteBatch.DrawString(spriteFont, "Hard", new Vector2(25, 350), Color.Yellow);
+            spriteBatch.DrawString(spriteFont, "Hard", new Vector2(275, 250), Color.Yellow);
             }
             else
             {
-                spriteBatch.DrawString(spriteFont, "Hard", new Vector2(25, 350), Color.White);
+                spriteBatch.DrawString(spriteFont, "Hard", new Vector2(275, 250), Color.White);
+            }
+            if (back)
+            {
+            spriteBatch.DrawString(spriteFont, "Back", new Vector2(25, 300), Color.Yellow);
+            }
+            else 
+            {
+                spriteBatch.DrawString(spriteFont, "Back", new Vector2(25, 300), Color.White);
             }
 
         }
