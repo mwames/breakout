@@ -35,7 +35,7 @@ namespace Breakout
             if (options == true && (input.WasPressed(Keys.Enter) || input.WasPressed(Buttons.Start)))
             {
                 start = false;
-                Store.scenes.ChangeScene(SceneName.Editor); // todo  come up with options and build the screen
+                Store.scenes.ChangeScene(SceneName.Options); // todo  come up with options and build the screen
             }
         }
 

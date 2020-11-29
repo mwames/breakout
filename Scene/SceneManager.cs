@@ -10,7 +10,8 @@ namespace Breakout
         GameOver,
         Pause,
         Editor,
-        Death
+        Death,
+        Options
     }
 
     public class SceneManager

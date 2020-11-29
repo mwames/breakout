@@ -78,6 +78,7 @@ namespace Breakout
             Store.scenes.Add(SceneName.Pause, new PauseScene());
             Store.scenes.Add(SceneName.Editor, new EditorScene());
             Store.scenes.Add(SceneName.Death, new DeathScene());
+            Store.scenes.Add(SceneName.Options, new OptionsScene());
             Store.scenes.ChangeScene((SceneName)envScene);
 
             base.Initialize();
