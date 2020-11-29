@@ -76,8 +76,6 @@ namespace Breakout
                 Color.White
             );
 
-            spriteBatch.DrawString(spriteFont, Center.ToString(), new Vector2(0, 0), Color.Black);
-
             if (Store.modes.Active(DebugOptions.ShowLocators))
             {
                 // Center locater dot
@@ -106,7 +104,7 @@ namespace Breakout
         {
             Random random = new Random();
             var variance = 0; // random.Next(-9, 10);
-            velocity += 5;
+            velocity += random.Next(5, 11);
 
             if (sideOfImpact == Side.Top && speed.Y < 0)
             {

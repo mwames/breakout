@@ -106,37 +106,43 @@ namespace Breakout
         {
             int totalLevels = System.IO.Directory.GetFiles($@"./Levels/").Count();
             ball.velocity = 250;
-            if (currentLevel < totalLevels)
-            {
-                var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
-                foreach (var line in lines)
-                {
-                    if (line != "")
-                    {
-                        var parts = line.Split(",");
-                        blocks.Add(new Block(
-                            Int32.Parse(parts[0]),
-                            Int32.Parse(parts[1]),
-                           textureNameMap[parts[2]]
-                            )
-                       );
-                    }
-                }
-            }
-            else
+            // if (currentLevel < totalLevels)
+            // {
+            //     var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
+            //     foreach (var line in lines)
+            //     {
+            //         if (line != "")
+            //         {
+            //             var parts = line.Split(",");
+            //             blocks.Add(new Block(
+            //                 Int32.Parse(parts[0]),
+            //                 Int32.Parse(parts[1]),
+            //                textureNameMap[parts[2]]
+            //                 )
+            //            );
+            //         }
+            //     }
+            // }
+            // else
             {
                 // TODO: We need to make sure blocks don't stack
+                blocks = new List<Block>();
                 Random random = new Random();
                 var count = random.Next(12, 25);
 
                 for (var i = 0; i < count; i += 1)
                 {
                     var col = random.Next(0, 5);
-                    var row = random.Next(2, 10);
+                    var row = random.Next(0, 10);
                     TextureName color = (TextureName)random.Next(6, 10);
 
-                    blocks.Add(new Block(col, row, color));
+                    var block = new Block(col, row, color);
+
+                    if (!blocks.Contains(block)) {
+                        blocks.Add(block);
+                    }
                 }
+                System.Console.WriteLine(blocks.Count);
             }
         }
 

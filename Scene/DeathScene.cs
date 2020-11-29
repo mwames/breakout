@@ -51,8 +51,8 @@ namespace Breakout
                     spriteFont,
                     livesMessage,
                     new Vector2(
-                        GameWindow.WIDTH / 2 -30 ,
-                        GameWindow.HEIGHT / 2 +45
+                        GameWindow.WIDTH / 2 - livesMessageSize.X / 2,
+                        GameWindow.HEIGHT / 2 + 45
                     ),
                     Color.DarkGoldenrod
                 );

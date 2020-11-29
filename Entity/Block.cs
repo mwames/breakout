@@ -68,5 +68,11 @@ namespace Breakout
                 return "GOLD";
             return "NAKEY BRIK!";
         }
+
+        public override bool Equals(object obj)
+        {
+            var block = obj as Block;
+            return this.row == block.row && this.col == block.col;
+        }
     }
 }
