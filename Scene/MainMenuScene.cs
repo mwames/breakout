@@ -6,11 +6,11 @@ namespace Breakout
 {
     public class MainMenuScene : IScene
     {
-        readonly int OFFSET = 50;
         readonly string MESSAGE = "Press enter to embrace your fate";
+        readonly int MARGIN_TOP = 75;
         public bool options = false;
         public bool start = true;
-        
+
         public void Update(InputState input, GameTime gameTime)
         {
 
@@ -41,56 +41,38 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
+            graphicsDevice.Clear(Color.White);
             spriteBatch.Draw(
                 Store.textures.Get(TextureName.TitleScreen),
-                new Rectangle(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT),
+                new Rectangle(0, MARGIN_TOP, GameWindow.WIDTH, GameWindow.HEIGHT / 2),
                 Color.White
             );
 
-            if (start)
-            {
+            var startColor = start ? Color.Yellow : Color.White;
+            var optionsColor = options ? Color.Yellow : Color.White;
+
+            var playButton = Store.textures.Get(TextureName.PlayButton);
             spriteBatch.Draw(
-                Store.textures.Get(TextureName.PlayButton),
-                new Rectangle(50,GameWindow.HEIGHT - 100,96,54),
-                Color.Yellow
+                playButton,
+                new Rectangle((GameWindow.WIDTH / 2) - 96 - 10, (GameWindow.HEIGHT / 2) + MARGIN_TOP * 2, 96, 54),
+                startColor
             );
-            }
 
-            else {
-                spriteBatch.Draw(
-                Store.textures.Get(TextureName.PlayButton),
-                new Rectangle(50,GameWindow.HEIGHT - 100,96,54),
-                Color.White
-                );
-            }
-
-            if (options)
-            {
-             spriteBatch.Draw(
+            spriteBatch.Draw(
                 Store.textures.Get(TextureName.OptionsButton),
-                new Rectangle(GameWindow.WIDTH - 150,GameWindow.HEIGHT - 100,110,54),
-                Color.Yellow
-                );
-            
-            }
-
-            else {
-                spriteBatch.Draw(
-                Store.textures.Get(TextureName.OptionsButton),
-                new Rectangle(GameWindow.WIDTH - 150,GameWindow.HEIGHT - 100,110,54),
-                Color.White
-                );
-            }
+                new Rectangle((GameWindow.WIDTH / 2) + 10, GameWindow.HEIGHT / 2 + MARGIN_TOP * 2, 110, 54),
+                optionsColor
+            );
 
             spriteBatch.DrawString(
                 spriteFont,
                 MESSAGE,
                 new Vector2(
                     GameWindow.WIDTH / 2 - spriteFont.MeasureString(MESSAGE).X / 2,
-                    GameWindow.HEIGHT - OFFSET
+                    GameWindow.HEIGHT / 2 - 30 + MARGIN_TOP
                 ),
                 Color.Black
                 );
         }
     }
- }
+}

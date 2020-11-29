@@ -38,6 +38,13 @@ namespace Breakout
             spriteBatch.Draw(Texture, new Vector2(x, y), Color.White);
         }
 
+        public void DrawMuted(SpriteBatch spriteBatch, SpriteFont spriteFont)
+        {
+            var x = col * Texture.Width;
+            var y = row * Texture.Height;
+            spriteBatch.Draw(Texture, new Vector2(x, y), new Color(new Vector4(255, 255, 255, 0.1f)));
+        }
+
         public void Update(GameTime gameTime, InputState input)
         {
 
@@ -73,6 +80,11 @@ namespace Breakout
         {
             var block = obj as Block;
             return this.row == block.row && this.col == block.col;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

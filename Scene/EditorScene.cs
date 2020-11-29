@@ -17,6 +17,7 @@ namespace Breakout
         public int score;
         public bool saved = false;
         public int[,] playfield = new int[COLUMNS, ROWS];
+        public InputState inputState;
         public Dictionary<string, TextureName> textureNameMap = new Dictionary<string, TextureName>()
         {
             {"red", TextureName.RedBlock},
@@ -67,6 +68,7 @@ namespace Breakout
 
         public void Update(InputState input, GameTime gameTime)
         {
+            inputState = input;
             foreach(var block in blocks)
             {
                 if (input.Clicked) {
@@ -79,7 +81,7 @@ namespace Breakout
 
             for(var column = 0; column < COLUMNS; column += 1) {
                 for(var row = 0; row < ROWS; row += 1) {
-                    var block = new Block(column, row + 3, TextureName.RedBlock);
+                    var block = new Block(column, row, TextureName.RedBlock);
                     if (input.Clicked && block.Clicked(input.ClickedAt))
                     {
                         playfield[column, row] = (int)currentColor;
@@ -105,28 +107,33 @@ namespace Breakout
             for(var column = 0; column < COLUMNS; column += 1) {
                 for(var row = 0; row < ROWS; row += 1) {
                     if (playfield[column, row] == (int)TextureName.RedBlock) {
-                        var block = new Block(column, row + 3, TextureName.RedBlock);
+                        var block = new Block(column, row, TextureName.RedBlock);
                         block.Draw(spriteBatch, spriteFont);
                     }
-                    if (playfield[column, row] == (int)TextureName.BlueBlock)
+                    else if (playfield[column, row] == (int)TextureName.BlueBlock)
                     {
-                        var block = new Block(column, row + 3, TextureName.BlueBlock);
+                        var block = new Block(column, row, TextureName.BlueBlock);
                         block.Draw(spriteBatch, spriteFont);
                     }
-                    if (playfield[column, row] == (int)TextureName.GreenBlock)
+                    else if (playfield[column, row] == (int)TextureName.GreenBlock)
                     {
-                        var block = new Block(column, row + 3, TextureName.GreenBlock);
+                        var block = new Block(column, row, TextureName.GreenBlock);
                         block.Draw(spriteBatch, spriteFont);
                     }
-                    if (playfield[column, row] == (int)TextureName.GoldBlock)
+                    else if (playfield[column, row] == (int)TextureName.GoldBlock)
                     {
-                        var block = new Block(column, row + 3, TextureName.GoldBlock);
+                        var block = new Block(column, row, TextureName.GoldBlock);
                         block.Draw(spriteBatch, spriteFont);
+                    }
+                    else {
+                        var block = new Block(column, row, TextureName.GoldBlock);
+                        block.DrawMuted(spriteBatch, spriteFont);
                     }
                 }
             }
 
             // Draw UI components
+            spriteBatch.Draw(Store.textures.Get(currentColor), new Vector2(inputState.mCurrent.X, inputState.mCurrent.Y), Color.White);
             spriteBatch.DrawString(spriteFont, "Selected: " + currentColor, new Vector2(7 * 96, 3), Color.Black);
             spriteBatch.DrawString(spriteFont, "Press enter to save level" , new Vector2(7 * 96, 120), Color.Black);
             if (saved)
