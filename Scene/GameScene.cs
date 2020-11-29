@@ -106,24 +106,24 @@ namespace Breakout
         {
             int totalLevels = System.IO.Directory.GetFiles($@"./Levels/").Count();
             ball.velocity = 250;
-            // if (currentLevel < totalLevels)
-            // {
-            //     var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
-            //     foreach (var line in lines)
-            //     {
-            //         if (line != "")
-            //         {
-            //             var parts = line.Split(",");
-            //             blocks.Add(new Block(
-            //                 Int32.Parse(parts[0]),
-            //                 Int32.Parse(parts[1]),
-            //                textureNameMap[parts[2]]
-            //                 )
-            //            );
-            //         }
-            //     }
-            // }
-            // else
+            if (currentLevel < totalLevels)
+            {
+                var lines = System.IO.File.ReadAllLines($@"./Levels/level{currentLevel}.txt");
+                foreach (var line in lines)
+                {
+                    if (line != "")
+                    {
+                        var parts = line.Split(",");
+                        blocks.Add(new Block(
+                            Int32.Parse(parts[0]),
+                            Int32.Parse(parts[1]),
+                           textureNameMap[parts[2]]
+                            )
+                       );
+                    }
+                }
+            }
+            else
             {
                 // TODO: We need to make sure blocks don't stack
                 blocks = new List<Block>();
@@ -148,10 +148,21 @@ namespace Breakout
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, GraphicsDevice graphicsDevice)
         {
-            // for (int i = 0; i < paddle.health; i++)    if we still want to display, could be paddles instead of hearts
-            // {
-            //     spriteBatch.Draw(Store.textures.Get(TextureName.Heart), new Vector2(i * 63, GameWindow.HEIGHT - 64), Color.White);
-            // }
+            var paddleTexture = Store.textures.Get(TextureName.Paddle);
+            for (int i = 0; i < Store.lives; i++)
+            {
+                spriteBatch.Draw(
+                    paddleTexture,
+                    new Rectangle(
+                        (10 * i) + (i * paddleTexture.Width / 2),
+                        GameWindow.HEIGHT - paddleTexture.Height / 2 - 10,
+                        paddleTexture.Width / 2,
+                        paddleTexture.Height / 2
+                    ),
+                    new Rectangle(0, 0, paddleTexture.Width, paddleTexture.Height),
+                    Color.White
+                );
+            }
 
             ball.Draw(spriteBatch, spriteFont);
             paddle.Draw(spriteBatch, spriteFont);
