@@ -7,6 +7,8 @@ namespace Breakout
     {
         None,
         BallSound,
+        DeathSound,
+        BlockSound,
     }
 
     public class SoundEffectManager

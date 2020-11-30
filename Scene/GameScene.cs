@@ -32,6 +32,7 @@ namespace Breakout
 
         public void Update(InputState input, GameTime gameTime)
         {
+            Store.songs.Play(SongName.MainGame);
             if (input.WasPressed(Buttons.Start) || input.WasPressed(Keys.Space))
             {
                 Store.scenes.ChangeScene(SceneName.Pause);
@@ -61,7 +62,7 @@ namespace Breakout
                     var sides = Collision.SideHit(ball, block);
                     block.OnCollide(sides["box"]);
                     score += 5;
-                    Store.soundEffects.Get(SoundEffectName.BallSound).Play();
+                    Store.soundEffects.Get(SoundEffectName.BlockSound).Play();
                     ball.OnCollide(sides["ball"], block);
                 }
             }
@@ -95,10 +96,12 @@ namespace Breakout
                 this.ball = new Ball(new Vector2(GameWindow.WIDTH / 2, GameWindow.HEIGHT / 2), new Vector2(200f, 200f));
                 this.paddle = new Paddle(new Vector2(GameWindow.WIDTH / 2 - 64, GameWindow.HEIGHT - 92), 460);
                 Store.lives -= 1;
+                Store.soundEffects.Get(SoundEffectName.DeathSound).Play();
                 Store.scenes.ChangeScene(SceneName.Death);
 
                 if (Store.lives <= 0)
                     Store.scenes.ChangeScene(SceneName.GameOver);
+                    
             }
         }
 

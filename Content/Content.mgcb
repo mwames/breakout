@@ -31,6 +31,12 @@
 /processorParam:Quality=Best
 /build:ballSound.wav
 
+#begin blockBust.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:blockBust.wav
+
 #begin BlueBlock.bmp
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -42,6 +48,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:BlueBlock.bmp
+
+#begin deathSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:deathSound.wav
+
+#begin FinallyFoundYou.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:FinallyFoundYou.mp3
 
 #begin gameFont.spritefont
 /importer:FontDescriptionImporter
@@ -91,6 +109,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:heart.png
+
+#begin NeonRain.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:NeonRain.wav
+
+#begin onlyUp.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:onlyUp.mp3
 
 #begin OptionsButton.png
 /importer:TextureImporter

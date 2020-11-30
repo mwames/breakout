@@ -97,7 +97,11 @@ namespace Breakout
             Store.textures.Add(TextureName.PlayButton, Content.Load<Texture2D>("PlayButton"));
             Store.textures.Add(TextureName.OptionsButton, Content.Load<Texture2D>("OptionsButton"));
             Store.soundEffects.Add(SoundEffectName.BallSound, Content.Load<SoundEffect>("ballSound"));
-            Store.songs.Add(SongName.GameOver, Content.Load<Song>("gameOver"));
+            Store.soundEffects.Add(SoundEffectName.DeathSound, Content.Load<SoundEffect>("deathSound"));
+            Store.soundEffects.Add(SoundEffectName.BlockSound, Content.Load<SoundEffect>("blockBust"));
+            Store.songs.Add(SongName.GameOver, Content.Load<Song>("gameOver")); // Gymnopédie No.1 Erik Satie. Remixed by KhanYash
+            Store.songs.Add(SongName.MainGame, Content.Load<Song>("onlyUp")); // Only Up By Joel Corelitz- MusicForNorthing.Com
+            Store.songs.Add(SongName.Title, Content.Load<Song>("FinallyFoundYou"));// Finally Found You By Joel Corelitz- MusicForNorthing.Com
             gameFont = Content.Load<SpriteFont>("gameFont");
         }
         

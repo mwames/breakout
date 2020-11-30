@@ -7,6 +7,8 @@ namespace Breakout
     {
         None,
         GameOver,
+        Title,
+        MainGame,
     }
 
     public class SongManager
@@ -32,6 +34,11 @@ namespace Breakout
         public void Pause()
         {
             MediaPlayer.Pause();
+        }
+
+        public void Stop()
+        {
+            MediaPlayer.Stop();
         }
     }
 }

@@ -7,12 +7,14 @@ namespace Breakout
     public class MainMenuScene : IScene
     {
         readonly string MESSAGE = "Press enter to embrace your fate";
+        readonly string COMPANY = "A KanAme Production";
         readonly int MARGIN_TOP = 75;
         public bool options = false;
         public bool start = true;
 
         public void Update(InputState input, GameTime gameTime)
         {
+            Store.songs.Play(SongName.Title);
 
             if (input.WasPressed(Keys.Right) || input.WasPressed(Buttons.DPadRight))
             {
@@ -70,6 +72,16 @@ namespace Breakout
                 new Vector2(
                     GameWindow.WIDTH / 2 - spriteFont.MeasureString(MESSAGE).X / 2,
                     GameWindow.HEIGHT / 2 - 30 + MARGIN_TOP
+                ),
+                Color.Black
+                );
+
+                spriteBatch.DrawString(
+                spriteFont,
+                COMPANY,
+                new Vector2(
+                    GameWindow.WIDTH / 2 -150,
+                    GameWindow.HEIGHT  - 30
                 ),
                 Color.Black
                 );
